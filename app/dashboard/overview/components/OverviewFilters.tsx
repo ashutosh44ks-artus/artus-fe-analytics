@@ -69,7 +69,11 @@ const OverviewFilters = (props: OverviewFiltersProps) => {
           </SelectGroup>
         </SelectContent>
       </Select>
-      <Button onClick={handleApplyFilters} size="sm">
+      <Button
+        onClick={handleApplyFilters}
+        size="sm"
+        className="min-w-20 font-semibold"
+      >
         Apply
       </Button>
     </div>

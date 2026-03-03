@@ -27,8 +27,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   return (
     <Sidebar {...props}>
-      <SidebarHeader className="border-b border-sidebar-border">
-        <div className="flex items-center gap-2 px-2 py-2">
+      <SidebarHeader className="border-b border-sidebar-border h-16">
+        <div className="flex items-center gap-4 px-2 py-2">
           <Image
             src={OrangeLogo}
             alt="Artus AI"
@@ -50,14 +50,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   const isActive = isSidebarItemActive(item.key, pathname);
                   return (
                     <SidebarMenuItem key={item.key}>
-                      <SidebarMenuButton asChild isActive={isActive}>
-                        <Link
-                          href={`/dashboard/${item.key}`}
-                          className="flex items-center gap-2"
-                        >
-                          <item.icon className="h-5 w-5" />
-                          {item.label}
-                        </Link>
+                      <SidebarMenuButton asChild isActive={isActive} size="lg">
+                        {item.disabled ? (
+                          <div className="flex items-center gap-2 cursor-not-allowed opacity-50">
+                            <item.icon className="size-5" />
+                            {item.label}
+                          </div>
+                        ) : (
+                          <Link
+                            href={`/dashboard/${item.key}`}
+                            className="flex items-center gap-2"
+                          >
+                            <item.icon className="size-5" />
+                            {item.label}
+                          </Link>
+                        )}
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );

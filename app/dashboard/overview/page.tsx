@@ -31,15 +31,15 @@ export default function OverviewPage() {
   });
 
   return (
-    <div className="min-h-0 flex-1 flex flex-col">
-      <header className="flex h-16 shrink-0 items-center gap-2 justify-between border-b px-4 bg-gray-900">
+    <div className="min-h-0 flex-1 flex flex-col relative">
+      <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 justify-between border-b px-4 bg-gray-900">
         <div className="flex items-center gap-2">
           <SidebarTrigger className="-ml-1" />
           <Separator
             orientation="vertical"
             className="mr-2 data-[orientation=vertical]:h-4"
           />
-          Overview
+          <span className="font-semibold">Overview</span>
         </div>
         <OverviewFilters
           setUsersFilter={setUsersFilter}

@@ -10,16 +10,19 @@ export const SIDEBAR_ITEMS_ANALYTICS = [
     key: "overview",
     label: "Overview",
     icon: PiGridFourFill,
+    disabled: false,
   },
   {
     key: "retention",
     label: "Retention",
     icon: PiCheckCircleFill,
+    disabled: true,
   },
   {
     key: "usage",
     label: "Usage",
     icon: PiChartBarFill,
+    disabled: true,
   },
 ];
 export const SIDEBAR_ITEMS_AI = [
@@ -27,6 +30,7 @@ export const SIDEBAR_ITEMS_AI = [
     key: "luna",
     label: "Luna",
     icon: PiCellTowerBold,
+    disabled: true,
   },
 ];
 export const SIDEBAR_ITEMS = [
@@ -47,7 +51,7 @@ export const isSidebarItemActive = (itemKey: string, currentPath: string) => {
 export const getPageTitle = (currentPath: string) => {
   const allItems = SIDEBAR_ITEMS.flatMap((section) => section.items);
   const activeItem = allItems.find((item) =>
-    isSidebarItemActive(item.key, currentPath)
+    isSidebarItemActive(item.key, currentPath),
   );
   return activeItem ? activeItem.label : "Dashboard";
 };

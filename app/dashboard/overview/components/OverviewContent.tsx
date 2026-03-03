@@ -1,24 +1,6 @@
-import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 import { LunaOverviewNestedData } from "@/services/dashboard";
-
-const OverviewItemStat = ({
-  label,
-  value,
-  accent = false,
-}: {
-  label: string;
-  value: number | string;
-  accent?: boolean;
-}) => {
-  return (
-    <div className="flex flex-col items-end">
-      <h3 className="font-semibold text-sm opacity-75 uppercase">{label}</h3>
-      <div className={cn("text-2xl font-semibold", accent && "text-primary")}>
-        {value}
-      </div>
-    </div>
-  );
-};
+import OverviewContentCard from "./OverviewContentCard";
 
 interface OverviewContentProps {
   data:
@@ -32,11 +14,19 @@ interface OverviewContentProps {
 }
 const OverviewContent = ({ data, isLoading, error }: OverviewContentProps) => {
   if (isLoading) {
-    return <div className="p-4">Loading...</div>;
+    return (
+      <main className="p-4 flex-1">
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <Skeleton key={i} className="h-26 w-full rounded-lg mb-4" />
+        ))}
+      </main>
+    );
   }
   if (error || !data) {
     return (
-      <div className="p-4">Error loading data. Please try again later.</div>
+      <main className="p-4 text-red-400">
+        Error loading data. Please try again later.
+      </main>
     );
   }
   return (
@@ -46,29 +36,7 @@ const OverviewContent = ({ data, isLoading, error }: OverviewContentProps) => {
           if (typeof value === "string") {
             return null; // Skip non-overview data
           }
-          return (
-            <div
-              key={key}
-              className="bg-gray-900 border rounded-lg p-6 flex justify-between items-center"
-            >
-              <div>
-                <h3 className="font-semibold">{key}</h3>
-                <p className="text-sm opacity-75">{value.Description}</p>
-              </div>
-              <div className="flex gap-4">
-                <OverviewItemStat
-                  label="Percentage"
-                  value={`${value.percentage}%`}
-                  accent
-                />
-                <OverviewItemStat label="Count" value={value.count} />
-                <OverviewItemStat
-                  label="Total Count"
-                  value={value.total_count}
-                />
-              </div>
-            </div>
-          );
+          return <OverviewContentCard key={key} label={key} value={value} />;
         })}
       </div>
     </main>
