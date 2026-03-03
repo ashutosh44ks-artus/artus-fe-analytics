@@ -25,6 +25,7 @@ import LogoWithTitleVertical from "../../components/LogoWithTitleVertical";
 import AuthHeader from "../../components/AuthHeader";
 import { cn } from "@/lib/utils";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { AxiosError } from "axios";
 
 export function VerifyEmailForm() {
   const router = useRouter();
@@ -39,32 +40,29 @@ export function VerifyEmailForm() {
 
   const { mutate: verifyOtp, isPending } = useMutation<
     LunaLoginSuccessResponse,
-    LunaLoginErrorResponse,
+    AxiosError<LunaLoginErrorResponse>,
     string
   >({
     mutationFn: verifyLunaOtp,
-
     onSuccess: async (data) => {
       toast.success("OTP verified successfully! Redirecting...");
-
-      console.log(data);
       // set cookie with token here
       await setCookie("luna_auth_token", data.token, {
         maxAge: data.expires_in,
       });
-
-      setTimeout(() => {
-        router.push("/dashboard/overview");
-      }, 1500);
+      // Give a brief moment for the cookie to settle and the toast to be visible
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      router.push("/dashboard/overview");
     },
-
     onError: (error) => {
-      toast.error(error.detail || "Invalid OTP. Please try again.");
+      toast.error(
+        error.response?.data?.detail || "Invalid OTP. Please try again.",
+      );
       setOtp("");
     },
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (otp.length !== 6) {
       toast.error("Please enter the 6-digit OTP sent to your email.");
@@ -75,22 +73,22 @@ export function VerifyEmailForm() {
 
   const { mutate: resendOtp, isPending: isPendingResendOtp } = useMutation<
     LunaOtpSuccessResponse,
-    LunaOtpErrorResponse
+    AxiosError<LunaOtpErrorResponse>
   >({
     mutationFn: generateLunaOtp,
     onSuccess: (data) => {
-      if ("success" in data && data.success) {
-        console.log("OTP Generated:", data);
+      if (data.success) {
         toast.success("Sent access code to your email! Check your inbox.");
         resetTimeLeft();
       } else {
-        console.log("OTP Generation Failed:", data);
+        console.error("Received Error with 200 status:", data);
         toast.error("Failed to send access code. Please try again.");
       }
     },
     onError: (error) => {
       toast.error(
-        error.detail || "Failed to send access code. Please try again.",
+        error.response?.data?.detail ||
+          "Failed to send access code. Please try again.",
       );
     },
   });

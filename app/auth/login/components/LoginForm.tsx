@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Mail, ShieldCheck } from "lucide-react";
+import { Mail } from "lucide-react";
 import {
   generateLunaOtp,
   LunaOtpErrorResponse,
@@ -14,30 +14,31 @@ import AuthHeader from "../../components/AuthHeader";
 import { Button } from "@/components/ui/button";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { PiShieldCheckFill } from "react-icons/pi";
+import { AxiosError } from "axios";
 
 export function LoginForm() {
   const router = useRouter();
 
   const { mutate: sendOtp, isPending } = useMutation<
     LunaOtpSuccessResponse,
-    LunaOtpErrorResponse
+    AxiosError<LunaOtpErrorResponse>
   >({
     mutationFn: generateLunaOtp,
     onSuccess: (data) => {
-      if ("success" in data && data.success) {
-        console.log("OTP Generated:", data);
+      if (data.success) {
         toast.success("Sent access code to your email! Check your inbox.");
         setTimeout(() => {
           router.push("/auth/verify-email");
         }, 1500);
       } else {
-        console.log("OTP Generation Failed:", data);
+        console.error("Received Error with 200 status:", data);
         toast.error("Failed to send access code. Please try again.");
       }
     },
     onError: (error) => {
       toast.error(
-        error.detail || "Failed to send access code. Please try again.",
+        error.response?.data?.detail ||
+          "Failed to send access code. Please try again.",
       );
     },
   });
