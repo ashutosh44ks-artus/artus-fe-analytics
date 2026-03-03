@@ -5,17 +5,16 @@ import { getCookie } from "@/lib/cookies";
 import axios from "axios";
 
 // Luna OTP Types
+export type LunaOverviewNestedData = {
+  count: number;
+  total_count: number;
+  percentage: number;
+  Description: string;
+};
 export type LunaOverviewSuccessResponse = {
   user_name: string;
 } & {
-  [key: string]:
-    | {
-        count: number;
-        total_count: number;
-        percentage: number;
-        Description: string;
-      }
-    | string; // Must include string to allow user_name
+  [key: string]: LunaOverviewNestedData | string; // Must include string to allow user_name
 };
 export interface LunaOverviewErrorResponse {
   detail: string;
@@ -28,12 +27,14 @@ interface LunaOverviewParams {
   filter_by_users?: string;
   filter_by_sessions?: string;
 }
+export interface LunaOverviewFormattedData {
+  user_name: string;
+  overview_data: [string, LunaOverviewNestedData][];
+}
 export const getLunaOverview = async ({
   filter_by_users,
   filter_by_sessions,
 }: LunaOverviewParams): Promise<LunaOverviewSuccessResponse> => {
-  // const response: LunaOverviewResponse = await apiClient.post(`/luna_otp`, {});
-  // return response;
   try {
     const token = await getCookie("luna_auth_token");
     const response = await apiClient.post<LunaOverviewSuccessResponse>(
