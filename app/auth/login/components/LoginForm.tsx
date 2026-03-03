@@ -32,7 +32,7 @@ export function LoginForm() {
     mutationFn: generateLunaOtp,
     onSuccess: (data) => {
       if ("success" in data && data.success) {
-        console.log("OTP Generated:", data.results);
+        console.log("OTP Generated:", data);
         setStatus("sent");
         toast.success("Sent access code to your email! Check your inbox.");
         setTimeout(() => {

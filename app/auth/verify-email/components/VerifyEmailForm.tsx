@@ -22,6 +22,7 @@ import {
 } from "@/services/auth";
 import { toast } from "sonner";
 import useTimeLeft from "./useTimeLeft";
+import { setCookie } from "@/lib/cookies";
 
 export function VerifyEmailForm() {
   const router = useRouter();
@@ -41,13 +42,12 @@ export function VerifyEmailForm() {
   >({
     mutationFn: verifyLunaOtp,
 
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       toast.success("OTP verified successfully! Redirecting...");
 
-      // You now have full typing:
-      console.log(data.token);
-      localStorage.setItem("luna_token", data.token);
-      console.log(data.identity);
+      console.log(data);
+      // set cookie with token here
+      await setCookie("luna_auth_token", data.token, { maxAge: data.expires_in });
 
       setTimeout(() => {
         router.push("/dashboard/overview");
@@ -76,8 +76,9 @@ export function VerifyEmailForm() {
     mutationFn: generateLunaOtp,
     onSuccess: (data) => {
       if ("success" in data && data.success) {
-        console.log("OTP Generated:", data.results);
+        console.log("OTP Generated:", data);
         toast.success("Sent access code to your email! Check your inbox.");
+        resetTimeLeft();
       } else {
         console.log("OTP Generation Failed:", data);
         toast.error("Failed to send access code. Please try again.");
@@ -87,9 +88,6 @@ export function VerifyEmailForm() {
       toast.error(
         error.detail || "Failed to send access code. Please try again.",
       );
-    },
-    onSettled: () => {
-      resetTimeLeft();
     },
   });
 
