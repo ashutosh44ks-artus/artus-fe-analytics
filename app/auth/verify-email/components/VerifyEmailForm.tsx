@@ -9,8 +9,6 @@ import {
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
 import { Clock } from "lucide-react";
-import Image from "next/image";
-import primaryLogo from "@/components/assets/orrange-logo.png";
 import { useMutation } from "@tanstack/react-query";
 import {
   generateLunaOtp,
@@ -23,6 +21,8 @@ import {
 import { toast } from "sonner";
 import useTimeLeft from "./useTimeLeft";
 import { setCookie } from "@/lib/cookies";
+import LogoWithTitleVertical from "../../components/LogoWithTitleVertical";
+import AuthHeader from "../../components/AuthHeader";
 
 export function VerifyEmailForm() {
   const router = useRouter();
@@ -47,7 +47,9 @@ export function VerifyEmailForm() {
 
       console.log(data);
       // set cookie with token here
-      await setCookie("luna_auth_token", data.token, { maxAge: data.expires_in });
+      await setCookie("luna_auth_token", data.token, {
+        maxAge: data.expires_in,
+      });
 
       setTimeout(() => {
         router.push("/dashboard/overview");
@@ -95,115 +97,84 @@ export function VerifyEmailForm() {
   const isButtonDisabled = !isOtpComplete || isPending;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-950 via-gray-900 to-slate-900 flex items-center justify-center p-6">
-      <div className="w-full max-w-md">
-        {/* Logo and Brand */}
-        <div className="flex items-center justify-center gap-3 mb-12">
-          <Image
-            src={primaryLogo}
-            alt="Artus AI"
-            width={40}
-            height={40}
-            className="drop-shadow-lg"
-          />
-          <h1 className="text-2xl font-bold text-white tracking-tight">
-            Artus AI
-          </h1>
-        </div>
+    <div className="w-full max-w-md">
+      {/* Logo and Brand */}
+      <LogoWithTitleVertical />
 
-        {/* Page Title */}
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-white mb-2">
-            Founder Verification
-          </h2>
-          <p className="text-gray-300">
-            I sent you a secure key.{" "}
-            <span className="font-medium">Enter it below for access</span>
-          </p>
-        </div>
+      {/* Page Title */}
+      <div className="text-center mb-8">
+        <AuthHeader>Founder Verification</AuthHeader>
+        <p className="text-gray-300">
+          I sent you a secure key.{" "}
+          <span className="font-medium">Enter it below for access</span>
+        </p>
+      </div>
 
-        {/* OTP Input Fields */}
-        <div className="mb-6">
-          <InputOTP
-            maxLength={6}
-            value={otp}
-            onChange={(value) => {
-              setOtp(value);
-            }}
-            disabled={isPending}
-          >
-            <InputOTPGroup className="gap-3 justify-center flex">
-              <InputOTPSlot
-                index={0}
-                className="w-14 h-16 border-2 border-slate-700 rounded-lg text-2xl font-semibold bg-slate-900/60 backdrop-blur-sm focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/15"
-              />
-              <InputOTPSlot
-                index={1}
-                className="w-14 h-16 border-2 border-slate-700 rounded-lg text-2xl font-semibold bg-slate-900/60 backdrop-blur-sm focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/15"
-              />
-              <InputOTPSlot
-                index={2}
-                className="w-14 h-16 border-2 border-slate-700 rounded-lg text-2xl font-semibold bg-slate-900/60 backdrop-blur-sm focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/15"
-              />
-              <InputOTPSlot
-                index={3}
-                className="w-14 h-16 border-2 border-slate-700 rounded-lg text-2xl font-semibold bg-slate-900/60 backdrop-blur-sm focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/15"
-              />
-              <InputOTPSlot
-                index={4}
-                className="w-14 h-16 border-2 border-slate-700 rounded-lg text-2xl font-semibold bg-slate-900/60 backdrop-blur-sm focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/15"
-              />
-              <InputOTPSlot
-                index={5}
-                className="w-14 h-16 border-2 border-slate-700 rounded-lg text-2xl font-semibold bg-slate-900/60 backdrop-blur-sm focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/15"
-              />
-            </InputOTPGroup>
-          </InputOTP>
-        </div>
-
-        {/* Timer */}
-        <div className="mb-6 flex items-center justify-center gap-2 text-sm">
-          <Clock className="w-4 h-4 text-gray-400" />
-          <div className="flex flex-col gap-0.5">
-            <span className="text-xs uppercase tracking-wider text-gray-500 font-medium">
-              Time Remaining
-            </span>
-            <span
-              className={`text-base font-semibold font-mono tracking-wider ${
-                timeLeft <= 60
-                  ? "text-primary-500"
-                  : timeLeft === 0
-                    ? "text-red-500"
-                    : "text-gray-300"
-              }`}
-            >
-              {formatTime(timeLeft)}
-            </span>
-          </div>
-        </div>
-
-        {/* Verify Button */}
-        <Button
-          onClick={handleVerify}
-          disabled={isButtonDisabled}
-          className="w-full h-12 mb-6 bg-linear-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 disabled:from-gray-700 disabled:to-gray-800"
-          size="lg"
+      {/* OTP Input Fields */}
+      <div className="mb-6">
+        <InputOTP
+          maxLength={6}
+          value={otp}
+          onChange={(value) => {
+            setOtp(value);
+          }}
+          disabled={isPending}
         >
-          {isPending ? "Verifying..." : "Verify"}
-        </Button>
+          <InputOTPGroup className="gap-3 justify-center flex">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <InputOTPSlot
+                key={index}
+                index={index}
+                className="w-14 h-16 border-2 border-slate-700 rounded-lg text-2xl font-semibold bg-slate-900/60 backdrop-blur-sm focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/15"
+              />
+            ))}
+          </InputOTPGroup>
+        </InputOTP>
+      </div>
 
-        {/* Resend Link */}
-        <div className="text-center text-sm text-gray-400">
-          Nothing in your inbox?{" "}
-          <Button
-            disabled={isPendingResendOtp || timeLeft > 0}
-            onClick={() => resendOtp()}
-            variant="link"
-            className="text-primary-500 hover:text-primary-400 font-semibold p-0 h-auto"
+      {/* Timer */}
+      <div className="mb-6 flex items-center justify-center gap-2 text-sm">
+        <Clock className="w-4 h-4 text-gray-400" />
+        <div className="flex flex-col gap-0.5">
+          <span className="text-xs uppercase tracking-wider text-gray-500 font-medium">
+            Time Remaining
+          </span>
+          <span
+            className={`text-base font-semibold font-mono tracking-wider ${
+              timeLeft <= 60
+                ? "text-primary-500"
+                : timeLeft === 0
+                  ? "text-red-500"
+                  : "text-gray-300"
+            }`}
           >
-            Send new OTP
-          </Button>
+            {formatTime(timeLeft)}
+          </span>
         </div>
+      </div>
+
+      {/* Verify Button */}
+      <Button
+        onClick={handleVerify}
+        disabled={isButtonDisabled}
+        variant="gradiantPrimary"
+        className="w-full h-12 mb-6"
+        size="lg"
+      >
+        {isPending ? "Verifying..." : "Verify"}
+      </Button>
+
+      {/* Resend Link */}
+      <div className="text-center text-sm text-gray-400">
+        Nothing in your inbox?{" "}
+        <Button
+          disabled={isPendingResendOtp || timeLeft > 0}
+          onClick={() => resendOtp()}
+          variant="link"
+          className="text-primary-500 hover:text-primary-400 font-semibold p-0 h-auto"
+        >
+          Send new OTP
+        </Button>
       </div>
     </div>
   );
