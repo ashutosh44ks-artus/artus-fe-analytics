@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useApiMutation, apiClient } from "@/lib/api";
 import { useState } from "react";
 import {
   AlertCircle,
@@ -12,11 +11,14 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import OrangeLogo from "@/components/assets/orrange-logo.png";
-
-interface OtpResponse {
-  message: string;
-  success: boolean;
-}
+import {
+  generateLunaOtp,
+  LunaOtpErrorResponse,
+  LunaOtpResponse,
+} from "@/services/auth";
+import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 export function LoginForm() {
   const router = useRouter();
@@ -24,26 +26,40 @@ export function LoginForm() {
     "idle",
   );
 
-  const { mutate: sendOtp, isPending } = useApiMutation<OtpResponse>(
-    () => apiClient.post<OtpResponse>("/luna_otp"),
-    {
-      onSuccess: () => {
+  const { mutate: sendOtp, isPending } = useMutation<
+    LunaOtpResponse,
+    AxiosError<LunaOtpErrorResponse>
+  >({
+    mutationFn: async () => {
+      return await generateLunaOtp();
+    },
+    onSuccess: (data) => {
+      if ("success" in data && data.success) {
+        console.log("OTP Generated:", data.results);
         setStatus("sent");
-        // Navigate to verify-email after showing success message
+        toast.success("Sent access code to your email! Check your inbox.");
         setTimeout(() => {
           router.push("/auth/verify-email");
         }, 1500);
-      },
-      onError: () => {
+      } else {
+        console.log("OTP Generation Failed:", data);
+        toast.error("Failed to send access code. Please try again.");
         setStatus("failed");
-      },
+      }
     },
-  );
+    onError: (error) => {
+      toast.error(
+        error.response?.data?.detail ||
+          "Failed to send access code. Please try again.",
+      );
+      setStatus("failed");
+    },
+  });
 
   const handleActivateAccess = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setStatus("sending");
-    sendOtp({});
+    sendOtp();
   };
 
   return (
