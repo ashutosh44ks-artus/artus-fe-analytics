@@ -15,7 +15,7 @@ interface OverviewContentProps {
 const OverviewContent = ({ data, isLoading, error }: OverviewContentProps) => {
   if (isLoading) {
     return (
-      <div className="p-4 flex-1">
+      <div>
         {Array.from({ length: 10 }).map((_, i) => (
           <Skeleton key={i} className="h-26 w-full rounded-lg mb-4" />
         ))}
@@ -24,7 +24,7 @@ const OverviewContent = ({ data, isLoading, error }: OverviewContentProps) => {
   }
   if (error || !data) {
     return (
-      <div className="p-4 text-red-400">
+      <div className="text-red-400">
         Error loading data. Please try again later.
       </div>
     );

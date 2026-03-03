@@ -5,6 +5,7 @@ import * as React from "react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -21,10 +22,17 @@ import {
   SIDEBAR_ITEMS,
 } from "@/app/dashboard/components/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { deleteCookie } from "@/lib/cookies";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
+  const router = useRouter();
+  const handleLogout = async () => {
+    await deleteCookie("luna_auth_token");
+    router.push("/auth/login");
+  };
   return (
     <Sidebar {...props}>
       <SidebarHeader className="border-b border-sidebar-border h-16">
@@ -74,6 +82,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroup>
         ))}
       </SidebarContent>
+      <SidebarFooter className="border-t border-sidebar-border">
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full"
+          onClick={handleLogout}
+        >
+          Log out
+        </Button>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
