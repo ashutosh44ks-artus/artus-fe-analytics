@@ -12,6 +12,8 @@ import { useMutation } from "@tanstack/react-query";
 import LogoWithTitleVertical from "../../components/LogoWithTitleVertical";
 import AuthHeader from "../../components/AuthHeader";
 import { Button } from "@/components/ui/button";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { PiShieldCheckFill } from "react-icons/pi";
 
 export function LoginForm() {
   const router = useRouter();
@@ -46,12 +48,12 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-120 relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-600">
+    <div className="w-full max-w-120 flex flex-col gap-12">
       {/* Header */}
-      <div className="text-center mb-10">
+      <div className="text-center flex flex-col gap-6">
         <LogoWithTitleVertical />
         <AuthHeader>Founders Access</AuthHeader>
-        <p className="text-gray-300 text-base leading-relaxed max-w-sm mx-auto px-4 animate-in fade-in duration-400 delay-500 fill-mode-both">
+        <p className="text-gray-300 text-base leading-relaxed max-w-sm mx-auto px-4 fill-mode-both">
           Sometimes you gotta run before you can walk.{" "}
           <span className="text-primary-400 font-medium">Access code</span>{" "}
           deploying to your{" "}
@@ -60,23 +62,27 @@ export function LoginForm() {
       </div>
 
       {/* Main Content */}
-      <div className="space-y-6">
-        {/* Button */}
+      <div>
         <Button
           variant="gradiantPrimary"
           onClick={handleActivateAccess}
           disabled={isPending}
-          className="h-12 w-full"
+          className="w-full font-semibold"
+          size="xl"
         >
-          <Mail className="w-5 h-5 shrink-0" />
-          {isPending ? "Activating..." : "Login with OTP"}
+          {isPending ? (
+            <AiOutlineLoading3Quarters className="animate-spin size-5" />
+          ) : (
+            <Mail className="size-5 shrink-0" />
+          )}
+          {isPending ? "Sending..." : "Login with OTP"}
         </Button>
       </div>
 
       {/* Footer */}
-      <div className="mt-12 pt-8 border-t border-primary-500/20">
-        <div className="flex items-center justify-center gap-2 text-gray-400 text-sm">
-          <ShieldCheck
+      <div className="pt-8 border-t border-primary-500/20">
+        <div className="flex items-center justify-center gap-2 text-gray-300 text-sm">
+          <PiShieldCheckFill
             className="w-4 h-4 animate-pulse"
             style={{
               filter: "drop-shadow(0 0 4px var(--color-primary))",

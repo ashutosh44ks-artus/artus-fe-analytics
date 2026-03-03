@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const LogoWithTitleVertical = () => {
   return (
-    <div className="animate-in fade-in duration-400 delay-200 fill-mode-both flex flex-col items-center gap-2">
+    <div className="fill-mode-both flex flex-col items-center gap-2">
       <Image
         src={OrangeLogo}
         alt="Artus AI"
@@ -12,7 +12,7 @@ const LogoWithTitleVertical = () => {
         height={32}
         width={32}
       />
-      <div className="text-sm font-semibold text-primary-400 tracking-wide uppercase mb-8 animate-in fade-in duration-400 delay-300 fill-mode-both">
+      <div className="text-sm font-semibold text-primary-400 tracking-wide uppercase fill-mode-both">
         Luna
       </div>
     </div>

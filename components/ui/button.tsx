@@ -14,7 +14,7 @@ const buttonVariants = cva(
         default: primaryButtonStyles,
         primary: primaryButtonStyles,
         gradiantPrimary:
-          "bg-linear-to-r from-primary-500 via-primary-600 to-primary-700 hover:from-primary-600 hover:via-primary-700 hover:to-primary-800 disabled:opacity-60 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-primary-500/50",
+          "bg-linear-to-r from-primary-700 via-primary-600 to-amber-500 hover:from-primary-600 hover:via-primary-600 hover:to-primary-600 disabled:opacity-60 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-primary-500/50 duration-150 ease-in-out",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40",
         outline:
@@ -30,6 +30,7 @@ const buttonVariants = cva(
         xs: "h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        xl: "h-12 rounded-lg px-8 has-[>svg]:px-5",
         icon: "size-9",
         "icon-xs": "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-8",
