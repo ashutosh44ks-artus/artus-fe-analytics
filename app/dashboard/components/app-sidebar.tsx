@@ -25,12 +25,16 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { deleteCookie } from "@/lib/cookies";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const handleLogout = async () => {
     await deleteCookie("luna_auth_token");
+    queryClient.clear();
     router.push("/auth/login");
   };
   return (
