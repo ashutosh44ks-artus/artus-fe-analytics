@@ -14,11 +14,10 @@ import OrangeLogo from "@/components/assets/orrange-logo.png";
 import {
   generateLunaOtp,
   LunaOtpErrorResponse,
-  LunaOtpResponse,
+  LunaOtpSuccessResponse,
 } from "@/services/auth";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 
 export function LoginForm() {
   const router = useRouter();
@@ -27,12 +26,10 @@ export function LoginForm() {
   );
 
   const { mutate: sendOtp, isPending } = useMutation<
-    LunaOtpResponse,
-    AxiosError<LunaOtpErrorResponse>
+    LunaOtpSuccessResponse,
+    LunaOtpErrorResponse
   >({
-    mutationFn: async () => {
-      return await generateLunaOtp();
-    },
+    mutationFn: generateLunaOtp,
     onSuccess: (data) => {
       if ("success" in data && data.success) {
         console.log("OTP Generated:", data.results);
@@ -49,8 +46,7 @@ export function LoginForm() {
     },
     onError: (error) => {
       toast.error(
-        error.response?.data?.detail ||
-          "Failed to send access code. Please try again.",
+        error.detail || "Failed to send access code. Please try again.",
       );
       setStatus("failed");
     },
