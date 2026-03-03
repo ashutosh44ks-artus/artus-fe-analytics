@@ -15,31 +15,29 @@ interface OverviewContentProps {
 const OverviewContent = ({ data, isLoading, error }: OverviewContentProps) => {
   if (isLoading) {
     return (
-      <main className="p-4 flex-1">
-        {[1, 2, 3, 4, 5, 6].map((i) => (
+      <div className="p-4 flex-1">
+        {Array.from({ length: 10 }).map((_, i) => (
           <Skeleton key={i} className="h-26 w-full rounded-lg mb-4" />
         ))}
-      </main>
+      </div>
     );
   }
   if (error || !data) {
     return (
-      <main className="p-4 text-red-400">
+      <div className="p-4 text-red-400">
         Error loading data. Please try again later.
-      </main>
+      </div>
     );
   }
   return (
-    <main className="p-4 flex-1">
-      <div className="flex flex-col gap-4">
-        {data.overview_data.map(([key, value]) => {
-          if (typeof value === "string") {
-            return null; // Skip non-overview data
-          }
-          return <OverviewContentCard key={key} label={key} value={value} />;
-        })}
-      </div>
-    </main>
+    <div className="flex flex-col gap-4">
+      {data.overview_data.map(([key, value]) => {
+        if (typeof value === "string") {
+          return null; // Skip non-overview data
+        }
+        return <OverviewContentCard key={key} label={key} value={value} />;
+      })}
+    </div>
   );
 };
 

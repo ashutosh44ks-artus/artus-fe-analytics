@@ -12,8 +12,8 @@ const OverviewItemStat = ({
 }) => {
   return (
     <div className="flex flex-col items-end">
-      <h3 className="font-semibold text-sm opacity-50 uppercase">{label}</h3>
-      <div className={cn("text-2xl font-medium", accent && "text-primary")}>
+      <h3 className="font-semibold text-xs sm:text-sm opacity-50 uppercase">{label}</h3>
+      <div className={cn("text-xl sm:text-2xl font-medium", accent && "text-primary")}>
         {value}
       </div>
     </div>
