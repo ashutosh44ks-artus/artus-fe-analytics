@@ -1,14 +1,9 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { LunaOverviewNestedData } from "@/services/dashboard";
+import { LunaOverviewFormattedData } from "@/services/dashboard";
 import OverviewContentCard from "./OverviewContentCard";
 
 interface OverviewContentProps {
-  data:
-    | {
-        user_name: string;
-        overview_data: [string, string | LunaOverviewNestedData][];
-      }
-    | undefined;
+  data: LunaOverviewFormattedData | undefined;
   isLoading: boolean;
   error: unknown;
 }
@@ -32,9 +27,6 @@ const OverviewContent = ({ data, isLoading, error }: OverviewContentProps) => {
   return (
     <div className="flex flex-col gap-4">
       {data.overview_data.map(([key, value]) => {
-        if (typeof value === "string") {
-          return null; // Skip non-overview data
-        }
         return <OverviewContentCard key={key} label={key} value={value} />;
       })}
     </div>

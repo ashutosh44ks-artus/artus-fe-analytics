@@ -2,31 +2,40 @@
 
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { getLunaOverview } from "@/services/dashboard";
+import {
+  getLunaOverview,
+  LunaOverviewErrorResponse,
+  LunaOverviewFormattedData,
+  LunaOverviewNestedData,
+} from "@/services/dashboard";
 import { useQuery } from "@tanstack/react-query";
 import OverviewContent from "./components/OverviewContent";
 import OverviewFilters from "./components/OverviewFilters";
 import { useState } from "react";
 import { FilterOptionValue } from "./components/utils";
+import { AxiosError } from "axios";
 
 export default function OverviewPage() {
   const [usersFilter, setUsersFilter] = useState<FilterOptionValue>("all");
   const [sessionsFilter, setSessionsFilter] =
     useState<FilterOptionValue>("all");
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery<
+    LunaOverviewFormattedData,
+    AxiosError<LunaOverviewErrorResponse>
+  >({
     queryKey: ["dashboard", "overview", usersFilter, sessionsFilter],
     queryFn: async () => {
-      const tempData = await getLunaOverview({
+      const { user_name, ...rest } = await getLunaOverview({
         filter_by_users: usersFilter,
         filter_by_sessions: sessionsFilter,
       });
-      const formattedData = {
-        user_name: tempData.user_name,
-        overview_data: Object.entries(tempData).filter(
-          ([key]) => key !== "user_name",
+
+      return {
+        user_name,
+        overview_data: Object.entries(
+          rest as Record<string, LunaOverviewNestedData>,
         ),
       };
-      return formattedData;
     },
   });
 
