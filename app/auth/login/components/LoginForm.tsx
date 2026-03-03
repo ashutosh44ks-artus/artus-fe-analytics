@@ -18,6 +18,7 @@ import {
 } from "@/services/auth";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
+import "@/app/auth/auth-styles.css";
 
 export function LoginForm() {
   const router = useRouter();
@@ -59,14 +60,7 @@ export function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-blue-950 flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Animated gradient orbs */}
-      <div className="absolute top-0 right-0 w-125 h-125 rounded-full bg-linear-to-br from-primary-500/20 to-transparent opacity-30 blur-3xl -translate-y-1/2 translate-x-1/2 animate-pulse" />
-      <div
-        className="absolute bottom-0 left-0 w-100 h-100 rounded-full bg-linear-to-br from-primary-500/15 to-transparent opacity-20 blur-3xl translate-y-1/2 -translate-x-1/2 animate-pulse"
-        style={{ animationDelay: "2s" }}
-      />
-
+    <div className="auth-container min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-blue-950 flex items-center justify-center p-6 relative overflow-hidden">
       {/* Content */}
       <div className="w-full max-w-120 relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-600">
         {/* Header */}
