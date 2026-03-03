@@ -4,6 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   getLunaOverview,
+  dashboardQueryKeys,
   LunaOverviewErrorResponse,
   LunaOverviewFormattedData,
   LunaOverviewNestedData,
@@ -23,7 +24,7 @@ export default function OverviewPage() {
     LunaOverviewFormattedData,
     AxiosError<LunaOverviewErrorResponse>
   >({
-    queryKey: ["dashboard", "overview", usersFilter, sessionsFilter],
+    queryKey: dashboardQueryKeys.overview(usersFilter, sessionsFilter),
     queryFn: async () => {
       const { user_name, ...rest } = await getLunaOverview({
         filter_by_users: usersFilter,

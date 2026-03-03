@@ -3,6 +3,19 @@
 import { apiClient } from "@/lib/api";
 import { getCookie } from "@/lib/cookies";
 
+// Query Keys
+export const dashboardQueryKeys = {
+  all: ["dashboard"] as const,
+
+  overview: (usersFilter: string, sessionsFilter: string) =>
+    [
+      ...dashboardQueryKeys.all,
+      "overview",
+      usersFilter,
+      sessionsFilter,
+    ] as const,
+};
+
 // Luna OTP Types
 export type LunaOverviewNestedData = {
   count: number;
