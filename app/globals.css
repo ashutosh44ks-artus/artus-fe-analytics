@@ -20,6 +20,17 @@
   --color-primary-900: oklch(0.3826 0.132877 35.4192);
   --color-primary-950: oklch(0.2826 0.0988 36.2);
   --color-primary: var(--color-primary-600);
+  --color-themePurple-50: oklch(0.9633 0.0206 301.15);
+  --color-themePurple-100: oklch(0.9113 0.0499 299.36);
+  --color-themePurple-200: oklch(0.8116 0.1075 296.62);
+  --color-themePurple-300: oklch(0.716 0.1644 293.85);
+  --color-themePurple-400: oklch(0.6247 0.2194 290.5);
+  --color-themePurple-500: oklch(0.5475 0.2633 285.29);
+  --color-themePurple-600: oklch(0.5338 0.2503 301.37);
+  --color-themePurple-700: oklch(0.4524 0.2068 302.15);
+  --color-themePurple-800: oklch(0.3578 0.162 302.84);
+  --color-themePurple-900: oklch(0.2676 0.1095 305.42);
+  --color-themePurple: var(--color-themePurple-600);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -59,6 +70,14 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   --text-2xs: 0.625rem;
+}
+
+@utility no-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 @layer base {

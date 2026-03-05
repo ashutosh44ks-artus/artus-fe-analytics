@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { MdSend } from "react-icons/md";
 
 interface ChatInputProps {
   sendMessage: (message: string) => void;
@@ -14,7 +15,6 @@ const ChatInput = ({
   disabled = false,
   textAreaPlaceholder = "Ask Luna anything...",
 }: ChatInputProps) => {
-  // textarea states
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [inputValue, setInputValue] = useState<string>("");
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -52,7 +52,7 @@ const ChatInput = ({
         onKeyDown={handleKeyDown}
         placeholder={textAreaPlaceholder}
         rows={1}
-        className="flex-1 min-h-0 rounded-xl px-3.5 py-3 text-xs! resize-none max-h-28 transition-all outline-hidden focus:outline-transparent focus:ring-0 focus:border-blue-500 dark:focus:border-blue-400 focus:shadow-lg focus:shadow-blue-500/10 focus-visible:ring-0 modern-scroll disabled:cursor-not-allowed caret-blue-500!"
+        className="flex-1 min-h-0 rounded-xl px-3.5 py-3 text-xs! resize-none max-h-28 transition-all outline-hidden focus:outline-transparent focus:ring-0 focus:border-primary dark:focus:border-primary focus:shadow-lg focus:shadow-primary/10 focus-visible:ring-0 no-scrollbar disabled:cursor-not-allowed caret-primary-500!"
         maxLength={15000}
         disabled={disabled}
       />
@@ -61,8 +61,9 @@ const ChatInput = ({
         onClick={handleSend}
         title="Send message"
         disabled={disabled}
+        className="rounded-full"
       >
-        ↑
+        <MdSend />
       </Button>
     </div>
   );
