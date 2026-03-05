@@ -30,7 +30,7 @@ export const SIDEBAR_ITEMS_AI = [
     key: "luna",
     label: "Luna",
     icon: PiCellTowerBold,
-    disabled: true,
+    disabled: false,
   },
 ];
 export const SIDEBAR_ITEMS = [

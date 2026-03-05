@@ -14,7 +14,7 @@ const buttonVariants = cva(
         default: primaryButtonStyles,
         primary: primaryButtonStyles,
         gradiantPrimary:
-          "bg-linear-to-r from-primary-700 via-primary-600 to-amber-500 hover:from-primary-600 hover:via-primary-600 hover:to-primary-600 disabled:opacity-60 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-primary-500/50 duration-150 ease-in-out",
+          "text-white dark:text-white bg-linear-to-r from-primary-700 via-primary-600 to-amber-500 hover:from-primary-600 hover:via-primary-600 hover:to-primary-600 disabled:opacity-60 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-primary-500/50 duration-150 ease-in-out",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40",
         outline:
