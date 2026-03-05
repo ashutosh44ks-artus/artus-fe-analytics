@@ -44,7 +44,7 @@ const ChatInput = ({
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full md:w-3/4">
       <Textarea
         ref={textareaRef}
         value={inputValue}
@@ -54,7 +54,7 @@ const ChatInput = ({
         rows={2}
         maxLength={15000}
         disabled={disabled}
-        className="w-full pr-14 min-h-14 rounded-xl px-3.5 py-3 text-sm! resize-none max-h-28 transition-all outline-hidden focus:outline-transparent focus:ring-0 focus:border-primary dark:focus:border-primary focus:shadow-lg focus:shadow-primary/10 focus-visible:ring-0 no-scrollbar disabled:cursor-not-allowed caret-primary-500!"
+        className="w-full pr-14 min-h-14 rounded-4xl px-3.5 py-3 text-sm! resize-none max-h-28 transition-all outline-hidden focus:outline-transparent focus:ring-0 focus:border-primary dark:focus:border-primary focus:shadow-lg focus:shadow-primary/10 focus-visible:ring-0 no-scrollbar disabled:cursor-not-allowed caret-primary-500!"
       />
       <Button
         size="icon-lg"

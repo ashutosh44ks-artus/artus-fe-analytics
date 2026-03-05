@@ -37,7 +37,7 @@ const NewChatShortcuts = () => {
   const userName = useUserStore((state) => state.userName);
   const userTeam = useUserStore((state) => state.getUserTeam());
   return (
-    <div className="h-full flex flex-col gap-4">
+    <div className="h-full flex flex-col gap-4 md:w-3/4 w-full mx-auto justify-center">
       <h2 className="text-xl font-semibold">
         Hey {userName ? userName : "there"}!{" "}
         <span className="greeting-emoji">👋</span>

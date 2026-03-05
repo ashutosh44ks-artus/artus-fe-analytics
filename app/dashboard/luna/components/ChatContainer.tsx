@@ -210,14 +210,16 @@ const ChatContainer = () => {
     sendMessageMutationFn.isPending && streamState === "waiting";
 
   return (
-    <>
+    <div className="relative flex-1 flex-col flex min-h-0">
       <ChatViewUIContainer
         activeChatId={activeChatId}
         chatMessages={chatMessages || []}
         isWaitingForFirstChunk={isWaitingForFirstChunk}
       />
-      <ChatInput sendMessage={sendMessage} disabled={finalChatInputLocking} />
-    </>
+      <div className="flex justify-center mt-2">
+        <ChatInput sendMessage={sendMessage} disabled={finalChatInputLocking} />
+      </div>
+    </div>
   );
 };
 

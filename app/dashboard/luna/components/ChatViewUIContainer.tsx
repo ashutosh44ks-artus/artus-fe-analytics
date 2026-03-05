@@ -73,7 +73,7 @@ export default function ChatViewUIContainer({
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
       <div
-        className="flex-1 space-y-4 overflow-x-hidden overflow-y-auto pb-5"
+        className="flex-1 flex flex-col items-center gap-4 overflow-x-hidden overflow-y-auto"
         ref={scrollContainerRef}
       >
         {chatMessages.map(
@@ -84,6 +84,7 @@ export default function ChatViewUIContainer({
             <div
               key={`${activeChatId}-${index}`}
               ref={index === chatMessages.length - 1 ? lastMessageRef : null}
+              className="w-full md:w-3/4"
             >
               <ChatItem {...item} />
             </div>
@@ -98,7 +99,7 @@ export default function ChatViewUIContainer({
       {showScrollButton && (
         <Button
           onClick={scrollToBottom}
-          className="absolute bottom-8 left-1/2 z-20 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full p-0"
+          className="absolute bottom-0 left-1/2 z-20 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full p-0"
           variant="default"
           aria-label="Scroll to bottom"
         >
