@@ -68,6 +68,8 @@ const ChatOptions = () => {
   const activeChatId = useLunaChatStore((state) => state.activeChatId);
   const setActiveChatId = useLunaChatStore((state) => state.setActiveChatId);
   const setChatInput = useLunaChatStore((state) => state.setChatInput);
+  const streamState = useLunaChatStore((state) => state.streamState);
+  const isStreaming = streamState === "streaming";
 
   const { data, isLoading, error } = useQuery<
     LunaChatHistoryItemsSuccessResponse["chats"],
@@ -90,7 +92,7 @@ const ChatOptions = () => {
           setChatInput("");
         }}
         title="New Chat"
-        // disabled={isStreaming}
+        disabled={isStreaming}
       >
         <AiOutlinePlus size={12} />
       </Button>
@@ -100,7 +102,7 @@ const ChatOptions = () => {
             size="icon-sm"
             variant="ghost"
             title="Chat History"
-            //   disabled={isStreaming}
+            disabled={isStreaming}
           >
             <AiOutlineHistory size={14} />
           </Button>
