@@ -8,7 +8,7 @@ import "@/app/dashboard/dashboard-styles.css";
 
 export default function LunaPage() {
   return (
-    <div className="min-h-0 flex-1 flex flex-col relative">
+    <div className="h-screen flex flex-col relative">
       <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 justify-between border-b px-4 bg-gray-900">
         <div className="flex items-center gap-2">
           <SidebarTrigger className="-ml-1" />
@@ -20,7 +20,7 @@ export default function LunaPage() {
         </div>
         <ChatOptions />
       </header>
-      <main className="p-4 flex-1 flex flex-col">
+      <main className="p-4 flex-1 flex flex-col min-h-0">
         <ChatContainer />
       </main>
     </div>
