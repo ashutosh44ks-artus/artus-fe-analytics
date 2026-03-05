@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { AiOutlineArrowDown } from "react-icons/ai";
 import TypingIndicator from "@/components/TypingIndicator";
 import { AiChatItem } from "./ChatItemHelpers";
-import { LunaChatByIdSuccessResponse } from "@/services/luna";
+import { LunaChatByIdSuccessResponse, LunaChatMessage } from "@/services/luna";
 import NewChatShortcuts from "./NewChatShortcuts";
 
 interface ChatViewUIContainerProps {
@@ -78,7 +78,7 @@ export default function ChatViewUIContainer({
       >
         {chatMessages.map(
           (
-            item: LunaChatByIdSuccessResponse["history"][number],
+            item: LunaChatMessage,
             index: number,
           ) => (
             <div

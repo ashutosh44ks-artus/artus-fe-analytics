@@ -1,38 +1,12 @@
-import { cn } from "@/lib/utils";
-import MarkdownRenderer from "@/components/MarkdownRenderer";
-import { AiChatItemLayout, baseStylesChatItem } from "./ChatItemHelpers";
-import { LunaChatByIdSuccessResponse } from "@/services/luna";
+import { AiChatItem, UserChatItem } from "./ChatItemHelpers";
+import { LunaChatMessage } from "@/services/luna";
 
-const ChatItem = ({
-  type,
-  content,
-}: LunaChatByIdSuccessResponse["history"][number]) => {
-  // User Chat Items
+const ChatItem = ({ type, content }: LunaChatMessage) => {
   if (type === "human") {
-    // User can only have one type
-    return (
-      <div
-        className={cn(
-          baseStylesChatItem.base,
-          baseStylesChatItem.userChatItem,
-          "border-primary-500/20 bg-primary-600/75 rounded-br-sm px-4 py-3 leading-snug text-white",
-        )}
-      >
-        {content}
-      </div>
-    );
+    return <UserChatItem>{content}</UserChatItem>;
   }
 
-  return (
-    <AiChatItemLayout
-      className="border px-4 py-3 border-gray-400/20 bg-gray-900"
-      label="Luna"
-    >
-      <MarkdownRenderer className="space-y-3 leading-snug">
-        {content}
-      </MarkdownRenderer>
-    </AiChatItemLayout>
-  );
+  return <AiChatItem isMarkdown>{content}</AiChatItem>;
 };
 
 export default ChatItem;

@@ -15,11 +15,12 @@ export const lunaChatQueryKeys = {
 };
 
 // Luna Chat Types
+export interface LunaChatMessage {
+  type: "human" | "ai";
+  content: string;
+}
 export interface LunaChatByIdSuccessResponse {
-  history: {
-    type: "human" | "ai";
-    content: string;
-  }[];
+  history: LunaChatMessage[];
 }
 export const getLunaChatById = async (
   chatId: number,

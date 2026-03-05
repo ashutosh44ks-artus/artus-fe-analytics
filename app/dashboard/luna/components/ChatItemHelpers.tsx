@@ -36,6 +36,19 @@ export const AiChatItemLayout = ({
   );
 };
 
+export const UserChatItem = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div
+      className={cn(
+        baseStylesChatItem.base,
+        baseStylesChatItem.userChatItem,
+        "border-primary-500/20 bg-primary-600/75 rounded-br-sm px-4 py-3 leading-snug text-white",
+      )}
+    >
+      {children}
+    </div>
+  );
+};
 export const AiChatItem = ({
   children,
   isMarkdown = true,
