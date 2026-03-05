@@ -2,7 +2,6 @@
 
 import { useRef, useEffect, useState } from "react";
 import ChatItem from "./ChatItem";
-// import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Button } from "@/components/ui/button";
 import { AiOutlineArrowDown } from "react-icons/ai";
 import TypingIndicator from "@/components/TypingIndicator";
@@ -10,16 +9,16 @@ import { AiChatItem } from "./ChatItemHelpers";
 import { LunaChatByIdSuccessResponse } from "@/services/luna";
 import NewChatShortcuts from "./NewChatShortcuts";
 
-interface ChatViewStreamingProps {
+interface ChatViewUIContainerProps {
   activeChatId: number | "new";
   chatMessages: LunaChatByIdSuccessResponse["history"];
   isWaitingForFirstChunk: boolean;
 }
-export default function ChatViewStreaming({
+export default function ChatViewUIContainer({
   activeChatId,
   chatMessages,
   isWaitingForFirstChunk,
-}: ChatViewStreamingProps) {
+}: ChatViewUIContainerProps) {
   const lastMessageRef = useRef(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const prevChatMessagesLengthRef = useRef<number | null>(null);
@@ -74,7 +73,7 @@ export default function ChatViewStreaming({
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
       <div
-        className="modern-scroll animate-subtleSlideFromLeft flex-1 space-y-4 overflow-x-hidden overflow-y-auto pb-5"
+        className="flex-1 space-y-4 overflow-x-hidden overflow-y-auto pb-5"
         ref={scrollContainerRef}
       >
         {chatMessages.map(
