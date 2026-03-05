@@ -44,7 +44,7 @@ export const AiChatItem = ({
   isMarkdown?: boolean;
 }) => {
   return (
-    <AiChatItemLayout className="border px-4 py-3 border-themePurple-400/20 bg-themePurple-600/10">
+    <AiChatItemLayout className="border px-4 py-3 border-gray-400/20 bg-gray-900">
       {isMarkdown ? (
         <MarkdownRenderer className="space-y-3 leading-snug">
           {children}

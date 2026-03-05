@@ -15,7 +15,7 @@ const ChatItem = ({
         className={cn(
           baseStylesChatItem.base,
           baseStylesChatItem.userChatItem,
-          "border-primary-600/20 bg-primary-600/15 rounded-br-sm px-4 py-3 leading-snug text-white",
+          "border-primary-500/20 bg-primary-600/75 rounded-br-sm px-4 py-3 leading-snug text-white",
         )}
       >
         {content}
@@ -25,7 +25,7 @@ const ChatItem = ({
 
   return (
     <AiChatItemLayout
-      className="border px-4 py-3 border-themePurple-400/20 bg-themePurple-600/10"
+      className="border px-4 py-3 border-gray-400/20 bg-gray-900"
       label="Luna"
     >
       <MarkdownRenderer className="space-y-3 leading-snug">
