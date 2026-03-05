@@ -1,5 +1,5 @@
 import { useUserStore } from "@/lib/store/userStore";
-import { MdOutlineInsights, MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { MdOutlineCode, MdOutlineInsights, MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { LunaChatStartShortcuts } from "./utils";
 
 const ShortcutItem = ({
@@ -14,7 +14,7 @@ const ShortcutItem = ({
   return (
     <div className="bg-gray-900 border rounded-lg p-4 flex sm:flex-row flex-col justify-between items-center gap-4">
       <div className="flex flex-row gap-4">
-        <div className="bg-primary text-white rounded-lg shrink-0 grid place-items-center size-8">
+        <div className="bg-primary-500/15 text-primary border border-primary/25 rounded-lg shrink-0 grid place-items-center size-8">
           <Icon />
         </div>
         <div>
@@ -42,8 +42,8 @@ const NewChatShortcuts = () => {
         <span className="greeting-emoji">👋</span>
       </h2>
       <div>
-        <p className="text-xs opacity-75 uppercase font-medium mb-2">
-          Things I Can Help With
+        <p className="text-xs opacity-75 uppercase font-medium flex items-center gap-2 mb-2">
+          <MdOutlineCode /> Things I Can Help With
         </p>
 
         <div className="flex flex-col gap-4">
