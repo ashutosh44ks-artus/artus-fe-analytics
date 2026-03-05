@@ -8,6 +8,7 @@ import { AiOutlineArrowDown } from "react-icons/ai";
 import TypingIndicator from "@/components/TypingIndicator";
 import { AiChatItem } from "./ChatItemHelpers";
 import { LunaChatByIdSuccessResponse } from "@/services/luna";
+import NewChatShortcuts from "./NewChatShortcuts";
 
 interface ChatViewStreamingProps {
   activeChatId: number | "new";
@@ -68,11 +69,7 @@ export default function ChatViewStreaming({
   }, [chatMessages]);
 
   if (chatMessages.length === 0) {
-    return (
-      <div className="relative -m-3 h-full text-center">
-        Luna sample static messages.
-      </div>
-    );
+    return <NewChatShortcuts />;
   }
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">

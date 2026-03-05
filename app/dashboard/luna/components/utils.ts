@@ -50,3 +50,36 @@ export const fixBackendResponseFormatting = (text: string) => {
 
   return { processedData, processedValue };
 };
+
+export const LunaChatStartShortcuts = [
+  {
+    title: "Read Dashboard & Summarize",
+    desc: "Get a quick overview of your key metrics, trends, and anomalies across all departments",
+    type: "product",
+  },
+  {
+    title: "Product Ideation Support",
+    desc: "Brainstorm features, analyze market fit, and explore product direction with data-backed insights",
+    type: "product",
+  },
+  {
+    title: "Analyze Top Anomalies",
+    desc: "Deep dive into unusual patterns, outliers, and unexpected changes in your business metrics",
+    type: "product",
+  },
+  {
+    title: "Identify Growth Opportunities",
+    desc: "Analyze your data to uncover high-impact opportunities for user acquisition and revenue growth",
+    type: "marketing",
+  },
+  {
+    title: "Generate Campaign Ideas",
+    desc: "Create campaign concepts, messaging angles, and content themes tailored to your audience",
+    type: "marketing",
+  },
+  {
+    title: "Suggest Marketing Experiments",
+    desc: "Get data-driven ideas for experiments to improve acquisition, activation, and retention",
+    type: "marketing",
+  },
+];
