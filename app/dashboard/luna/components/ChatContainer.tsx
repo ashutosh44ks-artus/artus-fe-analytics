@@ -10,7 +10,7 @@ import {
 import { AxiosError } from "axios";
 import ChatInput from "./ChatInput";
 import ChatViewUIContainer from "./ChatViewUIContainer";
-import { useLunaChatStore } from "../store/lunaChatStore";
+import { useLunaChatStore } from "@/lib/store/lunaChatStore";
 
 const ChatContainer = () => {
   const queryClient = useQueryClient();

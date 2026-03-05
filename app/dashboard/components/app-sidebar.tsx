@@ -26,18 +26,17 @@ import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { deleteCookie } from "@/lib/cookies";
 import { useQueryClient } from "@tanstack/react-query";
-import { useUserStore } from "@/lib/store/userStore";
+import { resetAllStores } from "@/lib/store/zustandUtils";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const clearUserState = useUserStore((state) => state.clearUserState);
 
   const handleLogout = async () => {
     await deleteCookie("luna_auth_token");
     queryClient.clear();
-    clearUserState();
+    resetAllStores();
     router.push("/auth/login");
   };
   return (

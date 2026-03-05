@@ -1,5 +1,4 @@
-import React from "react";
-import { useLunaChatStore } from "../store/lunaChatStore";
+import { useLunaChatStore } from "@/lib/store/lunaChatStore";
 import {
   Popover,
   PopoverContent,

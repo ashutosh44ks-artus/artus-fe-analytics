@@ -1,7 +1,5 @@
 import { UserTeam } from "@/lib/store/userStore";
 
-export type StreamState = "idle" | "waiting" | "streaming";
-
 export const fixBackendResponseFormatting = (text: string) => {
   let processedValue = null;
   let processedData = text;
