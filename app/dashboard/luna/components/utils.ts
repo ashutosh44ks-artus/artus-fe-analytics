@@ -1,3 +1,5 @@
+import { UserTeam } from "@/lib/store/userStore";
+
 export type StreamState = "idle" | "waiting" | "streaming";
 
 export const fixBackendResponseFormatting = (text: string) => {
@@ -51,35 +53,39 @@ export const fixBackendResponseFormatting = (text: string) => {
   return { processedData, processedValue };
 };
 
-export const LunaChatStartShortcuts = [
+export const LunaChatStartShortcuts: {
+  title: string;
+  desc: string;
+  team: UserTeam;
+}[] = [
   {
     title: "Read Dashboard & Summarize",
     desc: "Get a quick overview of your key metrics, trends, and anomalies across all departments",
-    type: "product",
+    team: "product",
   },
   {
     title: "Product Ideation Support",
     desc: "Brainstorm features, analyze market fit, and explore product direction with data-backed insights",
-    type: "product",
+    team: "product",
   },
   {
     title: "Analyze Top Anomalies",
     desc: "Deep dive into unusual patterns, outliers, and unexpected changes in your business metrics",
-    type: "product",
+    team: "product",
   },
   {
     title: "Identify Growth Opportunities",
     desc: "Analyze your data to uncover high-impact opportunities for user acquisition and revenue growth",
-    type: "marketing",
+    team: "marketing",
   },
   {
     title: "Generate Campaign Ideas",
     desc: "Create campaign concepts, messaging angles, and content themes tailored to your audience",
-    type: "marketing",
+    team: "marketing",
   },
   {
     title: "Suggest Marketing Experiments",
     desc: "Get data-driven ideas for experiments to improve acquisition, activation, and retention",
-    type: "marketing",
+    team: "marketing",
   },
 ];

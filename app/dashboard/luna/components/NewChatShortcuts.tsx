@@ -1,5 +1,9 @@
 import { useUserStore } from "@/lib/store/userStore";
-import { MdOutlineCode, MdOutlineInsights, MdOutlineKeyboardArrowRight } from "react-icons/md";
+import {
+  MdOutlineCode,
+  MdOutlineInsights,
+  MdOutlineKeyboardArrowRight,
+} from "react-icons/md";
 import { LunaChatStartShortcuts } from "./utils";
 
 const ShortcutItem = ({
@@ -31,10 +35,7 @@ const ShortcutItem = ({
 
 const NewChatShortcuts = () => {
   const userName = useUserStore((state) => state.userName);
-  const isProductTeam = useUserStore((state) => state.isUserFromProductTeam());
-  const isMarketingTeam = useUserStore((state) =>
-    state.isUserFromMarketingTeam(),
-  );
+  const userTeam = useUserStore((state) => state.getUserTeam());
   return (
     <div className="h-full flex flex-col gap-4">
       <h2 className="text-xl font-semibold">
@@ -48,13 +49,7 @@ const NewChatShortcuts = () => {
 
         <div className="flex flex-col gap-4">
           {LunaChatStartShortcuts.filter((shortcut) => {
-            if (isProductTeam) {
-              return shortcut.type === "product";
-            }
-            if (isMarketingTeam) {
-              return shortcut.type === "marketing";
-            }
-            return false;
+            return shortcut.team === userTeam;
           }).map((shortcut) => (
             <ShortcutItem
               key={shortcut.title}

@@ -12,13 +12,11 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import OverviewContent from "./components/OverviewContent";
 import OverviewFilters from "./components/OverviewFilters";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FilterOptionValue } from "./components/utils";
 import { AxiosError } from "axios";
-import { useUserStore } from "@/lib/store/userStore";
 
 export default function OverviewPage() {
-  const setUserName = useUserStore((state) => state.setUserName);
   const [usersFilter, setUsersFilter] = useState<FilterOptionValue>("all");
   const [sessionsFilter, setSessionsFilter] =
     useState<FilterOptionValue>("all");
@@ -41,12 +39,6 @@ export default function OverviewPage() {
       };
     },
   });
-
-  useEffect(() => {
-    if (data?.user_name) {
-      setUserName(data.user_name);
-    }
-  }, [data?.user_name, setUserName]);
 
   return (
     <div className="min-h-0 flex-1 flex flex-col relative">
