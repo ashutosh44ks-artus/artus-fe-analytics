@@ -91,9 +91,11 @@ export default function ChatViewUIContainer({
           ),
         )}
         {isWaitingForFirstChunk && (
-          <AiChatItem isMarkdown={false}>
-            <TypingIndicator />
-          </AiChatItem>
+          <div className="w-full md:w-3/4">
+            <AiChatItem isMarkdown={false}>
+              <TypingIndicator />
+            </AiChatItem>
+          </div>
         )}
       </div>
       {showScrollButton && (
