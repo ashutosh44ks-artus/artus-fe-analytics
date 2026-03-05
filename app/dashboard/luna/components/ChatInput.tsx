@@ -44,24 +44,24 @@ const ChatInput = ({
   };
 
   return (
-    <div className="pt-4 border-t dark:border-neutral-700 flex gap-2.5 items-center">
+    <div className="relative w-full">
       <Textarea
         ref={textareaRef}
         value={inputValue}
         onChange={handleInput}
         onKeyDown={handleKeyDown}
         placeholder={textAreaPlaceholder}
-        rows={1}
-        className="flex-1 min-h-0 rounded-xl px-3.5 py-3 text-xs! resize-none max-h-28 transition-all outline-hidden focus:outline-transparent focus:ring-0 focus:border-primary dark:focus:border-primary focus:shadow-lg focus:shadow-primary/10 focus-visible:ring-0 no-scrollbar disabled:cursor-not-allowed caret-primary-500!"
+        rows={2}
         maxLength={15000}
         disabled={disabled}
+        className="w-full pr-14 min-h-14 rounded-xl px-3.5 py-3 text-sm! resize-none max-h-28 transition-all outline-hidden focus:outline-transparent focus:ring-0 focus:border-primary dark:focus:border-primary focus:shadow-lg focus:shadow-primary/10 focus-visible:ring-0 no-scrollbar disabled:cursor-not-allowed caret-primary-500!"
       />
       <Button
         size="icon-lg"
         onClick={handleSend}
         title="Send message"
         disabled={disabled}
-        className="rounded-full"
+        className="absolute bottom-2 right-2 rounded-full"
       >
         <MdSend />
       </Button>
