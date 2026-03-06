@@ -34,7 +34,7 @@ export default function LunaMemoriesPage() {
           <Searchbar />
         </div>
       </header>
-      <main className="p-4 flex-1 flex flex-col min-h-0">
+      <main className="p-4 flex-1 flex flex-col">
         <MainContainer />
       </main>
     </div>
