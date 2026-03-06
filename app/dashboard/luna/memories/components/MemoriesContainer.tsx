@@ -29,7 +29,7 @@ const MemoryItem = ({
       <div className="flex justify-between items-center">
         <Badge variant="outline">
           <ClockIcon />
-          {timeDistance}
+          <span className="opacity-75">{timeDistance}</span>
         </Badge>
         <Button
           variant="destructive"

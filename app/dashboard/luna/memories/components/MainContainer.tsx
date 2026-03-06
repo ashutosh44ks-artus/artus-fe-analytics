@@ -38,7 +38,7 @@ const MainContainer = () => {
             <span className="font-medium">{searchInput}</span>
           </>
         ) : (
-          "All Memories"
+          `Showing all memories (${filteredMemories.length})`
         )}
       </p>
       <div className="flex-1 flex flex-col gap-4">
