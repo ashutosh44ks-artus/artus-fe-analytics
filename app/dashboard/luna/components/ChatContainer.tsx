@@ -11,6 +11,7 @@ import { AxiosError } from "axios";
 import ChatInput from "./ChatInput";
 import ChatViewUIContainer from "./ChatViewUIContainer";
 import { useLunaChatStore } from "@/lib/store/lunaChatStore";
+import { lunaMemoriesQueryKeys } from "@/services/luna-memories";
 
 const ChatContainer = () => {
   const queryClient = useQueryClient();
@@ -144,16 +145,14 @@ const ChatContainer = () => {
       } else if (!data.chat_id) {
         console.warn("No chat_id returned from API");
       }
+
+      // Invalidate memories queries to refetch relevant data after success
+      queryClient.invalidateQueries({ queryKey: lunaMemoriesQueryKeys.base });
+
       // Invalidate queries to refetch relevant data after success
       // const targetChatId = data.chat_id || originalChatId;
       // queryClient.invalidateQueries({
-      //   queryKey: [
-      //     projectId,
-      //     currentModuleId,
-      //     'chatMessages',
-      //     targetChatId,
-      //     'implementation-chat',
-      //   ],
+      //   queryKey: lunaChatQueryKeys.chat(targetChatId),
       // });
     },
     onError: (error, variables, context) => {
