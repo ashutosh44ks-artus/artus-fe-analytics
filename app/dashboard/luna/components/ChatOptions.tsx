@@ -14,6 +14,8 @@ import {
 } from "@/services/luna";
 import { cn } from "@/lib/utils";
 import { AxiosError } from "axios";
+import Link from "next/link";
+import { LucideGraduationCap } from "lucide-react";
 
 interface ChatHistoryItemProps {
   chatHistory: LunaChatHistoryItemsSuccessResponse["chats"];
@@ -122,6 +124,12 @@ const ChatOptions = () => {
           </div>
         </PopoverContent>
       </Popover>
+      <Button variant="outline" size="sm" asChild>
+        <Link href="/dashboard/luna/memories">
+          <LucideGraduationCap />
+          Memories
+        </Link>
+      </Button>
     </div>
   );
 };
