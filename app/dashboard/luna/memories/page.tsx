@@ -6,6 +6,7 @@ import "@/app/dashboard/dashboard-styles.css";
 import Link from "next/link";
 import Searchbar from "./components/Searchbar";
 import MainContainer from "./components/MainContainer";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 export default function LunaMemoriesPage() {
   return (
@@ -19,9 +20,10 @@ export default function LunaMemoriesPage() {
           />
           <div className="flex items-center gap-1">
             <Link
-              className="font-semibold hover:text-primary-500 transition-colors ease-in-out duration-150"
+              className="font-semibold hover:text-primary-500 transition-colors ease-in-out duration-150 flex gap-1 items-center"
               href="/dashboard/luna"
             >
+              <IoIosArrowRoundBack className="size-5" />
               Luna Chat
             </Link>
             <span className="font-semibold">/</span>
