@@ -1,3 +1,5 @@
+import { USER_TEAMS } from "@/lib/constants";
+import { MdEmail } from "react-icons/md";
 import {
   PiCellTowerBold,
   PiChartBarFill,
@@ -11,19 +13,29 @@ export const SIDEBAR_ITEMS_ANALYTICS = [
     label: "Overview",
     icon: PiGridFourFill,
     disabled: false,
+    team: "all",
   },
   {
     key: "retention",
     label: "Retention",
     icon: PiCheckCircleFill,
     disabled: true,
+    team: "all",
   },
   {
     key: "usage",
     label: "Usage",
     icon: PiChartBarFill,
     disabled: true,
+    team: "all",
   },
+  {
+    key: "user-feedback",
+    label: "User Feedback",
+    icon: MdEmail,
+    disabled: false,
+    team: USER_TEAMS.MARKETING,
+  }
 ];
 export const SIDEBAR_ITEMS_AI = [
   {
@@ -31,6 +43,7 @@ export const SIDEBAR_ITEMS_AI = [
     label: "Luna",
     icon: PiCellTowerBold,
     disabled: false,
+    team: "all",
   },
 ];
 export const SIDEBAR_ITEMS = [

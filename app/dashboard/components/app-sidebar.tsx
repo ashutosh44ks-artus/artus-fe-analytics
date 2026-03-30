@@ -27,11 +27,14 @@ import { Button } from "@/components/ui/button";
 import { deleteCookie } from "@/lib/cookies";
 import { useQueryClient } from "@tanstack/react-query";
 import { resetAllStores } from "@/lib/store/zustandUtils";
+import { useUserStore } from "@/lib/store/userStore";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const router = useRouter();
   const queryClient = useQueryClient();
+
+  const userTeam = useUserStore((state) => state.getUserTeam());
 
   const handleLogout = async () => {
     await deleteCookie("luna_auth_token");
@@ -62,6 +65,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map((item) => {
                   const isActive = isSidebarItemActive(item.key, pathname);
+                  if (item.team !== "all") {
+                    if (item.team && item.team !== userTeam) {
+                      return null; // Skip items that don't match the user's team
+                    }
+                  }
                   return (
                     <SidebarMenuItem key={item.key}>
                       <SidebarMenuButton asChild isActive={isActive} size="lg">

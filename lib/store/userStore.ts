@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { MarketingTeam, ProductTeam } from "@/lib/constants";
+import { MarketingTeam, ProductTeam, USER_TEAMS } from "@/lib/constants";
 
-export type UserTeam = "marketing" | "product" | "unknown";
+export type UserTeam = typeof USER_TEAMS[keyof typeof USER_TEAMS];
 
 interface UserState {
   userName: string | null;
@@ -22,10 +22,10 @@ export const useUserStore = create<UserState>((set, get) => ({
   getUserTeam: (): UserTeam => {
     const userName = get().userName?.toLowerCase() ?? "";
 
-    if (MarketingTeam.includes(userName)) return "marketing";
-    if (ProductTeam.includes(userName)) return "product";
+    if (MarketingTeam.includes(userName)) return USER_TEAMS.MARKETING;
+    if (ProductTeam.includes(userName)) return USER_TEAMS.PRODUCT;
 
-    return "unknown";
+    return USER_TEAMS.UNKNOWN;
   },
 
   reset: () => set(initialState),

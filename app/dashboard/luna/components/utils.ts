@@ -1,3 +1,4 @@
+import { USER_TEAMS } from "@/lib/constants";
 import { UserTeam } from "@/lib/store/userStore";
 
 export const fixBackendResponseFormatting = (text: string) => {
@@ -59,31 +60,31 @@ export const LunaChatStartShortcuts: {
   {
     title: "Read Dashboard & Summarize",
     desc: "Get a quick overview of your key metrics, trends, and anomalies across all departments",
-    team: "product",
+    team: USER_TEAMS.PRODUCT,
   },
   {
     title: "Product Ideation Support",
     desc: "Brainstorm features, analyze market fit, and explore product direction with data-backed insights",
-    team: "product",
+    team: USER_TEAMS.PRODUCT,
   },
   {
     title: "Analyze Top Anomalies",
     desc: "Deep dive into unusual patterns, outliers, and unexpected changes in your business metrics",
-    team: "product",
+    team: USER_TEAMS.PRODUCT,
   },
   {
     title: "Identify Growth Opportunities",
     desc: "Analyze your data to uncover high-impact opportunities for user acquisition and revenue growth",
-    team: "marketing",
+    team: USER_TEAMS.MARKETING,
   },
   {
     title: "Generate Campaign Ideas",
     desc: "Create campaign concepts, messaging angles, and content themes tailored to your audience",
-    team: "marketing",
+    team: USER_TEAMS.MARKETING,
   },
   {
     title: "Suggest Marketing Experiments",
     desc: "Get data-driven ideas for experiments to improve acquisition, activation, and retention",
-    team: "marketing",
+    team: USER_TEAMS.MARKETING,
   },
 ];
