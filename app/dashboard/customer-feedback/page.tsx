@@ -10,6 +10,7 @@ import {
 } from "@/services/customer-feedback";
 import FeedbackContent from "./components/FeedbackContent";
 import { AxiosError } from "axios";
+import FeedbackOverview from "./components/FeedbackOverview";
 
 const Page = () => {
   const { data, isLoading, error } = useQuery<
@@ -38,7 +39,19 @@ const Page = () => {
         {/* add filters here in the future */}
       </header>
       <main className="p-4 flex-1">
-        <FeedbackContent data={data} isLoading={isLoading} error={error} />
+        <FeedbackOverview data={data} isLoading={isLoading} error={error} />
+        <div>
+          <div className="mb-3 flex justify-between items-center">
+            <p className="text-xs opacity-75 uppercase font-medium flex items-center gap-2">
+              Showing all customer feedback ({data ? data.length : 0})
+            </p>
+            {/* add sorting options here in the future */}
+            <p className="text-xs opacity-75 uppercase font-medium flex items-center gap-2">
+              Sorted by: <span className="font-medium">Most Recent</span>
+            </p>
+          </div>
+          <FeedbackContent data={data} isLoading={isLoading} error={error} />
+        </div>
       </main>
     </div>
   );
