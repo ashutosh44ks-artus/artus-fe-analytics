@@ -1,12 +1,20 @@
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import { CustomerFeedbackDataSuccessResponse } from "@/services/customer-feedback";
 import { formatDistance } from "date-fns";
-import { ClockIcon } from "lucide-react";
+import {
+  BriefcaseBusiness,
+  ClockIcon,
+  Mail,
+  MessageSquareQuote,
+  Star,
+  UserRoundSearch,
+} from "lucide-react";
 import { useMemo } from "react";
 import { PiCopySimple } from "react-icons/pi";
 import { toast } from "sonner";
-import { HEAR_ABOUT_OPTIONS, JOB_TITLE_OPTIONS } from "./utils";
+import { getRatingTone, HEAR_ABOUT_OPTIONS, JOB_TITLE_OPTIONS } from "./utils";
 
 interface FeedbackItemProps extends Omit<
   CustomerFeedbackDataSuccessResponse["feedback"][number],
@@ -14,6 +22,7 @@ interface FeedbackItemProps extends Omit<
 > {
   timeDistance: string;
 }
+
 const FeedbackItem = ({ timeDistance, ...feedback }: FeedbackItemProps) => {
   const {
     email,
@@ -23,6 +32,8 @@ const FeedbackItem = ({ timeDistance, ...feedback }: FeedbackItemProps) => {
     heard_from,
     job_title,
   } = feedback;
+  const ratingTone = getRatingTone(rating);
+
   const handleCopyEmail = () => {
     try {
       navigator.clipboard.writeText(email);
@@ -52,42 +63,69 @@ const FeedbackItem = ({ timeDistance, ...feedback }: FeedbackItemProps) => {
     }
     return result;
   }, [job_title, company_name, heard_from]);
+
   return (
-    <div className="bg-gray-900 border rounded-lg p-4 flex flex-col gap-4 group">
-      <div className="flex justify-between items-center">
-        <p className="text-xs flex items-center gap-1">
-          <span className="text-muted-foreground">RATING:</span>
-          <span className="font-medium">{rating} / 5</span>
-        </p>
+    <div
+      className={cn(
+        "bg-gray-900 border rounded-lg p-4 sm:p-5 flex flex-col gap-4 group relative overflow-hidden",
+        "before:absolute before:inset-y-0 before:left-0 before:w-1 before:bg-linear-to-b",
+        ratingTone.cardAccent,
+      )}
+    >
+      <div className="flex justify-between items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2">
+          <Badge className={cn("border", ratingTone.badge)}>
+            <Star className={cn("size-3.5", ratingTone.icon)} />
+            <span>
+              {rating} / 5 • {ratingTone.label}
+            </span>
+          </Badge>
+        </div>
         <Badge variant="outline">
           <ClockIcon />
           <span className="opacity-75">{timeDistance}</span>
         </Badge>
       </div>
-      <h3 className="text-sm">{feedbackContent}</h3>
-      <div className="flex justify-between items-center sm:flex-nowrap flex-wrap gap-2">
-        <div className="flex flex-col">
-          <span className="text-xs text-muted-foreground">From:</span>
-          <span
-            className="flex items-center gap-2 cursor-pointer opacity-90"
+
+      <div className="rounded-lg border border-border/60 bg-background/25 p-3 sm:p-4">
+        <p className="text-sm leading-relaxed flex items-center gap-2">
+          <MessageSquareQuote className="size-4 shrink-0 text-muted-foreground" />
+          <span>{feedbackContent}</span>
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+        <div className="rounded-md border border-border/60 px-3 py-2 bg-background/20">
+          <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+            <Mail className="size-3.5" />
+            From
+          </span>
+          <button
+            type="button"
+            className="mt-1 flex items-center gap-2 cursor-pointer opacity-90 hover:opacity-100 transition-opacity"
             onClick={handleCopyEmail}
           >
-            <span className="text-sm">{email}</span>
-            <PiCopySimple className="size-4" />
+            <span className="text-sm truncate max-w-55 text-left">{email}</span>
+            <PiCopySimple className="size-4 shrink-0" />
+          </button>
+        </div>
+
+        <div className="rounded-md border border-border/60 px-3 py-2 bg-background/20">
+          <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+            <BriefcaseBusiness className="size-3.5" />
+            Job Title & Company
+          </span>
+          <span className="mt-1 text-sm opacity-90 flex items-center gap-1.5">
+            {formattedCustomerMetaData.job_title} at {formattedCustomerMetaData.company_name}
           </span>
         </div>
-        <div className="flex flex-col">
-          <span className="text-xs text-muted-foreground">Job Title:</span>
-          <span className="text-sm opacity-90">
-            {formattedCustomerMetaData.job_title} at{" "}
-            {formattedCustomerMetaData.company_name}
+
+        <div className="rounded-md border border-border/60 px-3 py-2 bg-background/20">
+          <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+            <UserRoundSearch className="size-3.5" />
+            Heard From
           </span>
-        </div>
-        <div className="flex flex-col">
-          <span className="text-xs text-muted-foreground">Heard From:</span>
-          <span className="text-sm opacity-90">
-            {formattedCustomerMetaData.heard_from}
-          </span>
+          <span className="mt-1 text-sm opacity-90">{formattedCustomerMetaData.heard_from}</span>
         </div>
       </div>
     </div>
