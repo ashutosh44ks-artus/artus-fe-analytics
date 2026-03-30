@@ -17,6 +17,9 @@ export interface CustomerFeedbackDataSuccessResponse {
     feedback_id: string;
     rating: number;
     user_id: string;
+    company_name: string;
+    heard_from: string;
+    job_title: string;
   }[];
 }
 export const getCustomerFeedbackData =
