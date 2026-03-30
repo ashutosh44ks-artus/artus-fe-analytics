@@ -34,7 +34,7 @@ export const SIDEBAR_ITEMS_ANALYTICS = [
     label: "Customer Feedback",
     icon: MdEmail,
     disabled: false,
-    team: USER_TEAMS.MARKETING,
+    team: "all",
   }
 ];
 export const SIDEBAR_ITEMS_AI = [
