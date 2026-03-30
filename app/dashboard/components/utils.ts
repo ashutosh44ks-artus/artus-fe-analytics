@@ -30,8 +30,8 @@ export const SIDEBAR_ITEMS_ANALYTICS = [
     team: "all",
   },
   {
-    key: "user-feedback",
-    label: "User Feedback",
+    key: "customer-feedback",
+    label: "Customer Feedback",
     icon: MdEmail,
     disabled: false,
     team: USER_TEAMS.MARKETING,
