@@ -152,7 +152,7 @@ export function DynamicFilters() {
         <div className="space-y-4">
           <Label className="text-sm font-medium">Add New Filter</Label>
 
-          <div className="grid grid-cols-10 gap-3 items-end">
+          <div className="grid sm:grid-cols-10 grid-cols-2 gap-3 items-end">
             {/* Metric Select */}
             <div className="space-y-2 col-span-5">
               <Label htmlFor="metric-select" className="text-xs">

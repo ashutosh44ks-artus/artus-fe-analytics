@@ -36,7 +36,7 @@ export function UserFilters() {
         </CardDescription>
       </CardHeader>
       {/* grid 3x3 */}
-      <CardContent className="grid grid-cols-3 gap-4">
+      <CardContent className="grid sm:grid-cols-3 grid-cols-2 gap-4">
         {/* Last Logged In Filter */}
         <div className="space-y-2">
           <Label htmlFor="last-logged-in">Last Logged In</Label>

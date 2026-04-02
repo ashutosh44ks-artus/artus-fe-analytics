@@ -156,7 +156,7 @@ export function EmailTemplateSelector({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center gap-4 mb-4">
+        <div className="flex items-center gap-4 mb-4 sm:flex-row flex-col">
           <Select
             value={selectedTemplate ?? undefined}
             onValueChange={setSelectedTemplate}
@@ -184,7 +184,7 @@ export function EmailTemplateSelector({
               estimatedUserCount === 0 ||
               isLoadingEmailTemplates
             }
-            className="gap-2"
+            className="gap-2 sm:w-auto w-full"
           >
             <Mail className="w-5 h-5" />
             {isPending ? "Sending..." : "Send Campaign"}
