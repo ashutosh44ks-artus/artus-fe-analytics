@@ -6,6 +6,7 @@ import {
   PiCheckCircleFill,
   PiGridFourFill,
 } from "react-icons/pi";
+import { VscFeedback } from "react-icons/vsc";
 
 export const SIDEBAR_ITEMS_ANALYTICS = [
   {
@@ -32,6 +33,13 @@ export const SIDEBAR_ITEMS_ANALYTICS = [
   {
     key: "customer-feedback",
     label: "Customer Feedback",
+    icon: VscFeedback,
+    disabled: false,
+    team: "all",
+  },
+  {
+    key: "bulk-emails",
+    label: "Marketing Emails",
     icon: MdEmail,
     disabled: false,
     team: "all",

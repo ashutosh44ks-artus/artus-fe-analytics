@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FilterOptions, FilterOptionValue } from "./utils";
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -15,13 +15,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 import { MdFilterList } from "react-icons/md";
-import { useQuery } from "@tanstack/react-query";
-import {
-  dashboardQueryKeys,
-  getLunaOverviewUserJobTitles,
-  LunaOverviewUserJobTitleList,
-} from "@/services/dashboard";
-import { AxiosError } from "axios";
+import useJobTitles from "@/hooks/use-job-titles";
 
 interface FilterSelectProps {
   label: string;
@@ -134,30 +128,7 @@ const OverviewFilters = (props: OverviewFiltersProps) => {
     setIsPopoverOpen(false);
   };
 
-  const { data, isLoading, error } = useQuery<
-    LunaOverviewUserJobTitleList["job_titles"],
-    AxiosError
-  >({
-    queryKey: dashboardQueryKeys.jobTitles(),
-    queryFn: async () => {
-      const data = await getLunaOverviewUserJobTitles();
-      return data.job_titles;
-    },
-    placeholderData: [],
-  });
-  const jobTitleOptions = useMemo(() => {
-    const defaultValue = { label: "All", value: "all" };
-    if (!Array.isArray(data)) return [defaultValue];
-    if (data.length === 0) return [defaultValue];
-    const jobTitleSelectOptions = data.map((jobTitle) => ({
-      label: jobTitle
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" "),
-      value: jobTitle,
-    }));
-    return [defaultValue, ...jobTitleSelectOptions];
-  }, [data]);
+  const { data, isLoading, error } = useJobTitles();
 
   return (
     <>
@@ -185,7 +156,7 @@ const OverviewFilters = (props: OverviewFiltersProps) => {
           showLabel
           isLoading={isLoading}
           isError={!!error}
-          options={jobTitleOptions}
+          options={data}
         />
         <Button
           onClick={handleApplyFilters}
@@ -234,7 +205,7 @@ const OverviewFilters = (props: OverviewFiltersProps) => {
                   triggerClassName="w-full"
                   isLoading={isLoading}
                   isError={!!error}
-                  options={jobTitleOptions}
+                  options={data}
                 />
               </div>
               <Button
