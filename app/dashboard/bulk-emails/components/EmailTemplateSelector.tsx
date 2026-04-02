@@ -43,6 +43,7 @@ import { BulkEmailUser } from "@/services/bulk-emails";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { supportedTemplateModelFieldValuePairs } from "./utils";
+import EmailTemplateBody from "./EmailTemplateBody";
 
 interface EmailTemplateSelectorProps {
   estimatedUserCount: number;
@@ -105,7 +106,7 @@ export function EmailTemplateSelector({
 
   const {
     data: emailTemplates,
-    isLoading: isLoadingEmailTemplates,
+    isFetching: isLoadingEmailTemplates,
     error: errorEmailTemplates,
   } = useQuery({
     queryKey: postmarkQueryKeys.templates(),
@@ -120,16 +121,16 @@ export function EmailTemplateSelector({
       // only return templates where all model fields are in the supported list
       return data.filter((template) => {
         // const unsupportedFields = []
-        const result = template.templateModel.every((field) =>{
+        const result = template.templateModel.every((field) => {
           // need to support {{/if field}} and {{#if field}} conditionals and {{^field}}
           const formattedField = field.replace(/^[\/#^]+/, "");
-          const temp =  supportedTemplateModelFields.includes(formattedField);
+          const temp = supportedTemplateModelFields.includes(formattedField);
           if (!temp) {
             // unsupportedFields.push(field);
           }
           return temp;
         });
-        // console.log(`Template "${template.name}" model fields:`, template.templateModel, 
+        // console.log(`Template "${template.name}" model fields:`, template.templateModel,
         //   `Supported: ${result}`,
         //   unsupportedFields.length > 0 ? `Unsupported fields: ${unsupportedFields.join(", ")}` : "All fields supported"
         // );
@@ -144,12 +145,12 @@ export function EmailTemplateSelector({
       null
     );
   };
-  const template = selectedTemplate ? getTemplateById(selectedTemplate) : null;
+  const selectedTemplateObject = selectedTemplate ? getTemplateById(selectedTemplate) : null;
 
   return (
     <Card className="rounded-xl">
       <CardHeader>
-        <CardTitle>Email Template</CardTitle>
+        <CardTitle>Email Template </CardTitle>
         <CardDescription>
           Choose a template for your email campaign
         </CardDescription>
@@ -189,45 +190,11 @@ export function EmailTemplateSelector({
             {isPending ? "Sending..." : "Send Campaign"}
           </Button>
         </div>
-        {!template && (
-          <div className="text-center py-12">
-            <p className="text-sm">No template selected</p>
-          </div>
-        )}
-        {errorEmailTemplates && (
-          <div className="text-center py-12">
-            <p className="text-sm text-red-500">
-              Error loading templates: {errorEmailTemplates.message}
-            </p>
-          </div>
-        )}
-        {isLoadingEmailTemplates && (
-          <div className="text-center py-12">
-            <p className="text-sm">Loading templates...</p>
-          </div>
-        )}
-        {template && (
-          <div className="space-y-4">
-            {/* Subject Line */}
-            <div>
-              <p className="text-xs font-semibold mb-1">Subject:</p>
-              <p className="text-sm bg-slate-900 px-3 py-2 rounded-md border">
-                {template.subject}
-              </p>
-            </div>
-
-            {/* Email Preview */}
-            <div>
-              <p className="text-xs font-semibold mb-2">Email Preview:</p>
-              <div className="border rounded-xl p-4 bg-slate-900">
-                <div
-                  className="prose prose-sm max-w-none"
-                  dangerouslySetInnerHTML={{ __html: template.body }}
-                />
-              </div>
-            </div>
-          </div>
-        )}
+        <EmailTemplateBody
+          selectedTemplate={selectedTemplateObject}
+          isLoading={isLoadingEmailTemplates}
+          error={errorEmailTemplates}
+        />
       </CardContent>
 
       {/* Confirmation Dialog */}

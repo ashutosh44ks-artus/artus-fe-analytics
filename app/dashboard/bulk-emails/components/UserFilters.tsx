@@ -18,11 +18,14 @@ import {
 } from "@/components/ui/card";
 import useJobTitles from "@/hooks/use-job-titles";
 import useHeardFrom from "@/hooks/use-heard-from";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export function UserFilters() {
   const { userFilters, setUserFilter } = useBulkEmailsStore();
-  const { data: userJobTitlesData } = useJobTitles();
-  const { data: userHeardFromData } = useHeardFrom();
+  const { data: userJobTitlesData, isLoading: isLoadingJobTitles } =
+    useJobTitles();
+  const { data: userHeardFromData, isLoading: isLoadingHeardFrom } =
+    useHeardFrom();
 
   return (
     <Card className="rounded-xl">
@@ -99,7 +102,12 @@ export function UserFilters() {
 
         {/* Job Title Filter */}
         <div className="space-y-2">
-          <Label htmlFor="job-title">Job Title</Label>
+          <Label htmlFor="job-title">
+            Job Title{" "}
+            {isLoadingJobTitles && (
+              <AiOutlineLoading3Quarters className="animate-spin" />
+            )}
+          </Label>
           <Select
             value={userFilters.filter_by_job_title}
             onValueChange={(value) =>
@@ -121,7 +129,12 @@ export function UserFilters() {
 
         {/* Heard From Filter */}
         <div className="space-y-2">
-          <Label htmlFor="heard-from">Heard From</Label>
+          <Label htmlFor="heard-from">
+            Heard From{" "}
+            {isLoadingHeardFrom && (
+              <AiOutlineLoading3Quarters className="animate-spin" />
+            )}
+          </Label>
           <Select
             value={userFilters.filter_by_heard_from}
             onValueChange={(value) =>
