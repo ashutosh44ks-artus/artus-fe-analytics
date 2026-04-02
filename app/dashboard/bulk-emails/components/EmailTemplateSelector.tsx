@@ -21,8 +21,14 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Mail } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { getAvailableTemplates, postmarkQueryKeys } from "@/services/postmark";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  getAvailableTemplates,
+  PostmarkBatchResponseItem,
+  postmarkQueryKeys,
+  sendBulkEmail,
+  SendBulkEmailRequest,
+} from "@/services/postmark";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,7 +39,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
-import { BulkEmailUser, sendBulkEmail } from "@/services/bulk-emails";
+import { BulkEmailUser } from "@/services/bulk-emails";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { supportedTemplateModelFieldValuePairs } from "./utils";
 
 interface EmailTemplateSelectorProps {
   estimatedUserCount: number;
@@ -48,32 +57,50 @@ export function EmailTemplateSelector({
   dynamicFilters,
   userFilters,
 }: EmailTemplateSelectorProps) {
-  const { selectedTemplate, setSelectedTemplate, reset } = useBulkEmailsStore();
+  const { selectedTemplate, setSelectedTemplate } = useBulkEmailsStore();
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [isSending, setIsSending] = useState(false);
+
+  const { mutate, isPending } = useMutation<
+    PostmarkBatchResponseItem[],
+    AxiosError,
+    SendBulkEmailRequest
+  >({
+    mutationFn: sendBulkEmail,
+    onSuccess: () => {
+      toast.success("Email campaign sent successfully!");
+    },
+    onError: (error) => {
+      console.error("Error sending campaign:", error);
+      toast.error("Error sending campaign. Check console for details.");
+    },
+    onSettled: () => {
+      setShowConfirmDialog(false);
+    },
+  });
   const handleSendCampaign = async () => {
     if (!selectedTemplate) {
-      alert("Please select an email template");
+      toast.error("Please select an email template");
       return;
     }
-
     if (users.length === 0) {
-      alert("No users match the current filters");
+      toast.error("No users match the current filters");
       return;
     }
 
-    setIsSending(true);
-    try {
-      await sendBulkEmail(userFilters, dynamicFilters, selectedTemplate, users);
-      alert("Email campaign sent successfully!");
-      reset();
-    } catch (error) {
-      console.error("Error sending campaign:", error);
-      alert("Error sending campaign. Check console for details.");
-    } finally {
-      setIsSending(false);
-      setShowConfirmDialog(false);
-    }
+    const usersAsRecepients = users.map((user) => ({
+      email: user.email,
+      name: user.user_name,
+      templateData: {
+        // user specific template data will go here
+        name: user.user_name,
+        first_name: user.user_name.split(" ")[0],
+      },
+    }));
+
+    mutate({
+      templateId: selectedTemplate,
+      recipients: usersAsRecepients,
+    });
   };
 
   const {
@@ -84,6 +111,31 @@ export function EmailTemplateSelector({
     queryKey: postmarkQueryKeys.templates(),
     queryFn: getAvailableTemplates,
     placeholderData: [],
+    select: (data) => {
+      const supportedTemplateModelFields = [
+        ...Object.keys(supportedTemplateModelFieldValuePairs),
+        "name",
+        "first_name",
+      ];
+      // only return templates where all model fields are in the supported list
+      return data.filter((template) => {
+        // const unsupportedFields = []
+        const result = template.templateModel.every((field) =>{
+          // need to support {{/if field}} and {{#if field}} conditionals and {{^field}}
+          const formattedField = field.replace(/^[\/#^]+/, "");
+          const temp =  supportedTemplateModelFields.includes(formattedField);
+          if (!temp) {
+            // unsupportedFields.push(field);
+          }
+          return temp;
+        });
+        // console.log(`Template "${template.name}" model fields:`, template.templateModel, 
+        //   `Supported: ${result}`,
+        //   unsupportedFields.length > 0 ? `Unsupported fields: ${unsupportedFields.join(", ")}` : "All fields supported"
+        // );
+        return result;
+      });
+    },
   });
 
   const getTemplateById = (id: string) => {
@@ -134,7 +186,7 @@ export function EmailTemplateSelector({
             className="gap-2"
           >
             <Mail className="w-5 h-5" />
-            {isSending ? "Sending..." : "Send Campaign"}
+            {isPending ? "Sending..." : "Send Campaign"}
           </Button>
         </div>
         {!template && (
@@ -212,9 +264,9 @@ export function EmailTemplateSelector({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleSendCampaign}
-              disabled={isSending || estimatedUserCount === 0}
+              disabled={isPending || estimatedUserCount === 0}
             >
-              {isSending ? "Sending..." : "Send Campaign"}
+              {isPending ? "Sending..." : "Send Campaign"}
             </AlertDialogAction>
           </div>
         </AlertDialogContent>

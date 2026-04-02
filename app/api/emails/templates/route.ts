@@ -1,4 +1,5 @@
 import axios from "axios";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
@@ -62,6 +63,16 @@ export async function GET() {
 			{ status: 500 }
 		);
 	}
+
+	const cookieStore = await cookies();
+    const authToken = cookieStore.get('luna_auth_token')?.value;
+
+    if (!authToken) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 },
+      );
+    }
 
 	const apiClient = axios.create({
 		baseURL: "https://api.postmarkapp.com",

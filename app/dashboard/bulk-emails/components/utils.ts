@@ -3,7 +3,7 @@
  */
 export const formatFilterLabel = (metric: string): string => {
   return metric
-    .replace(/\s*\([^)]*\)/g, '') // Remove parentheses and content
+    .replace(/\s*\([^)]*\)/g, "") // Remove parentheses and content
     .trim();
 };
 
@@ -12,7 +12,7 @@ export const formatFilterLabel = (metric: string): string => {
  */
 export const getOperatorOptions = (): string[] => {
   // Most metrics support all operators
-  return ['=', '!=', '>', '>=', '<', '<='];
+  return ["=", "!=", ">", ">=", "<", "<="];
 };
 
 /**
@@ -21,17 +21,26 @@ export const getOperatorOptions = (): string[] => {
 export const validateConditional = (
   metric: string,
   operator: string,
-  value: string | number | string[]
+  value: string | number | string[],
 ): boolean => {
   if (!metric || !operator) return false;
 
-  if (typeof value === 'string') {
+  if (typeof value === "string") {
     return value.trim().length > 0;
   }
 
-  if (typeof value === 'number') {
+  if (typeof value === "number") {
     return !isNaN(value);
   }
 
   return false;
+};
+
+export const supportedTemplateModelFieldValuePairs = {
+  plan_comparison_link: "https://app.artusai.co/account/plans",
+  upgrade_link: "https://app.artusai.co/account/plans",
+  billing_link: "https://app.artusai.co/account/plans",
+  support_email: "admin@artusai.co",
+  recommended_plan: "Pro Plan",
+  faq_link: "https://artusai.co",
 };

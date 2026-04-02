@@ -55,26 +55,3 @@ export const getUsersList = async (
     conditionals,
   });
 };
-
-export const sendBulkEmail = async (
-  userFilters: UserFilters,
-  conditionals: Conditional[],
-  templateId: string,
-  users: BulkEmailUser[],
-): Promise<{ success: boolean; message: string }> => {
-  await getCookie("luna_auth_token");
-
-  // Stub: Log the email send instead of making API call
-  console.log("[STUB] sendBulkEmail called with:", {
-    userFilters,
-    conditionals,
-    templateId,
-    usersCount: users.length,
-    users: users.map((u) => ({ email: u.email, user_name: u.user_name })),
-  });
-
-  return {
-    success: true,
-    message: `Email campaign would be sent to ${users.length} users`,
-  };
-};
