@@ -161,7 +161,7 @@ export function EmailTemplateSelector({
             value={selectedTemplate ?? undefined}
             onValueChange={setSelectedTemplate}
           >
-            <SelectTrigger className="w-full h-auto min-h-10">
+            <SelectTrigger className="w-full h-auto">
               <SelectValue placeholder="Choose an email template" />
             </SelectTrigger>
             <SelectContent>
@@ -177,7 +177,6 @@ export function EmailTemplateSelector({
             </SelectContent>
           </Select>
           <Button
-            size="lg"
             onClick={() => setShowConfirmDialog(true)}
             disabled={
               !selectedTemplate ||
