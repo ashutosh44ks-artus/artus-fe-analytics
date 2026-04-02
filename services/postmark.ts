@@ -1,6 +1,6 @@
 import { supportedTemplateModelFieldValuePairs } from "@/app/dashboard/bulk-emails/components/utils";
+import { apiClient } from "@/lib/api";
 import { getCookie } from "@/lib/cookies";
-import axios from "axios";
 
 // Query Keys
 export const postmarkQueryKeys = {
@@ -26,11 +26,15 @@ export const getAvailableTemplates = async (): Promise<
     throw new Error("Luna auth token is missing");
   }
 
-  const { data: templates } = await axios.get<TemplatesApiResponse[]>(
-    "/api/emails/templates",
+  return await apiClient.post<TemplatesApiResponse[]>(
+    "/emails/templates",
+    {
+      token,
+    },
+    {
+      timeout: 60000, // Set a timeout of 60 seconds for this request
+    },
   );
-
-  return templates;
 };
 
 export interface PostmarkBatchResponseItem {
@@ -69,8 +73,8 @@ export const sendBulkEmail = async ({
     throw new Error("Luna auth token is missing");
   }
 
-  const { data } = await axios.post<PostmarkBatchResponseItem[]>(
-    "/api/emails/templates/send/bulk",
+  return await apiClient.post<PostmarkBatchResponseItem[]>(
+    "/emails/templates/send/bulk",
     {
       templateId,
       templateData: supportedTemplateModelFieldValuePairs,
@@ -79,8 +83,10 @@ export const sendBulkEmail = async ({
         name: user.name,
         templateData: user.templateData,
       })),
+      token,
+    },
+    {
+      timeout: 60000, // Set a timeout of 60 seconds for this request
     },
   );
-
-  return data;
 };
