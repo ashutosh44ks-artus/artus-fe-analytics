@@ -22,6 +22,9 @@ export const dashboardQueryKeys = {
 
   jobTitles: () =>
     [...dashboardQueryKeys.all, "filters", "job-titles"] as const,
+
+  heardFrom: () =>
+    [...dashboardQueryKeys.all, "filters", "heard-from"] as const,
 };
 
 // Luna OTP Types
@@ -75,3 +78,18 @@ export const getLunaOverviewUserJobTitles =
       },
     );
   };
+
+export interface LunaOverviewUserHeardFromList {
+  heard_from: string[];
+}
+export const getLunaOverviewUserHeardFrom =
+  async (): Promise<LunaOverviewUserHeardFromList> => {
+    const token = await getCookie("luna_auth_token");
+    return await apiClient.post<LunaOverviewUserHeardFromList>(
+      `/luna_heard_from`,
+      {
+        token,
+      },
+    );
+  };
+  

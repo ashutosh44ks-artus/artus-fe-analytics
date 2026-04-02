@@ -17,10 +17,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import useJobTitles from "@/hooks/use-job-titles";
+import useHeardFrom from "@/hooks/use-heard-from";
 
 export function UserFilters() {
   const { userFilters, setUserFilter } = useBulkEmailsStore();
   const { data: userJobTitlesData } = useJobTitles();
+  const { data: userHeardFromData } = useHeardFrom();
 
   return (
     <Card className="rounded-xl">
@@ -130,12 +132,11 @@ export function UserFilters() {
               <SelectValue placeholder="Select source" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Sources</SelectItem>
-              <SelectItem value="meta">Facebook / Instagram</SelectItem>
-              <SelectItem value="google_search">Google Search</SelectItem>
-              <SelectItem value="linkedin">LinkedIn</SelectItem>
-              <SelectItem value="reddit">Reddit</SelectItem>
-              <SelectItem value="others">Others</SelectItem>
+              {userHeardFromData.map((hf) => (
+                <SelectItem key={hf.value} value={hf.value}>
+                  {hf.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
