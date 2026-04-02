@@ -145,7 +145,9 @@ export function EmailTemplateSelector({
       null
     );
   };
-  const selectedTemplateObject = selectedTemplate ? getTemplateById(selectedTemplate) : null;
+  const selectedTemplateObject = selectedTemplate
+    ? getTemplateById(selectedTemplate)
+    : null;
 
   return (
     <Card className="rounded-xl">
@@ -202,27 +204,24 @@ export function EmailTemplateSelector({
           <AlertDialogHeader>
             <AlertDialogTitle>Send Email Campaign?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will send an email to {estimatedUserCount.toLocaleString()}{" "}
-              users. This action cannot be undone.
+              Are you sure you want to send this email campaign to{" "}
+              {estimatedUserCount.toLocaleString()} users?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="py-4 bg-zinc-900 px-4 rounded-lg">
-            <p className="text-sm font-medium mb-2">Campaign Details:</p>
             <ul className="text-sm space-y-1">
               <li>
                 <strong>Recipients:</strong>{" "}
                 {estimatedUserCount.toLocaleString()} users
               </li>
               <li>
-                <strong>Template:</strong>{" "}
-                {selectedTemplate
-                  ? `Template "${selectedTemplate}"`
-                  : "Not selected"}
-              </li>
-              <li>
                 <strong>Filters Applied:</strong>{" "}
                 {Object.values(userFilters).filter((v) => v !== "all").length +
                   dynamicFilters.length}
+              </li>
+              <li>
+                <strong>Template:</strong> [{selectedTemplate}]{" "}
+                {selectedTemplateObject?.name}
               </li>
             </ul>
           </div>
