@@ -91,19 +91,19 @@ export function UserPreviewsTable({
           </span>
         ),
       }),
-      columnHelper.accessor("last_logged_in", {
-        header: "Last Seen",
-        cell: (info: CellContext<BulkEmailUser, string | undefined>) => {
-          const date = info.getValue();
-          return (
-            <span className="text-sm">
-              {date
-                ? formatDistanceToNow(new Date(date), { addSuffix: true })
-                : "Never"}
-            </span>
-          );
-        },
-      }),
+      // columnHelper.accessor("last_logged_in", {
+      //   header: "Last Seen",
+      //   cell: (info: CellContext<BulkEmailUser, string | undefined>) => {
+      //     const date = info.getValue();
+      //     return (
+      //       <span className="text-sm">
+      //         {date
+      //           ? formatDistanceToNow(new Date(date), { addSuffix: true })
+      //           : "Never"}
+      //       </span>
+      //     );
+      //   },
+      // }),
     ],
     [columnHelper],
   );

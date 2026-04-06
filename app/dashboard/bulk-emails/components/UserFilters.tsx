@@ -38,7 +38,7 @@ export function UserFilters() {
       {/* grid 3x3 */}
       <CardContent className="grid sm:grid-cols-3 grid-cols-2 gap-4">
         {/* Last Logged In Filter */}
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Label htmlFor="last-logged-in">Last Logged In</Label>
           <Select
             value={userFilters.filter_by_last_logged_in}
@@ -56,7 +56,7 @@ export function UserFilters() {
               <SelectItem value="last_30_days">Last 30 Days</SelectItem>
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
 
         {/* Credits Status Filter */}
         <div className="space-y-2">
