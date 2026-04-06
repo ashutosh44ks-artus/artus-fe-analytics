@@ -80,6 +80,27 @@ export function UserFilters() {
           </Select>
         </div>
 
+        {/* Active Plan Filter */}
+        <div className="space-y-2">
+          <Label htmlFor="active-plan">Active Plan</Label>
+          <Select
+            value={userFilters.active_plan}
+            onValueChange={(
+              value: "all" | "free" | "pro" | "enterprise",
+            ) => setUserFilter("active_plan", value)}
+          >
+            <SelectTrigger id="active-plan" className="w-full">
+              <SelectValue placeholder="Select active plan" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Users</SelectItem>
+              <SelectItem value="free">Free</SelectItem>
+              <SelectItem value="pro">Pro</SelectItem>
+              <SelectItem value="enterprise">Enterprise</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         {/* Visited Payments Plan Filter */}
         <div className="space-y-2">
           <Label htmlFor="visited-payments">Visited Payments Plan</Label>

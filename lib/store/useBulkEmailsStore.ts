@@ -12,6 +12,7 @@ export interface UserFilters {
   visited_payments_plan: 'all' | 'yes' | 'no';
   filter_by_job_title: string;
   filter_by_heard_from: string;
+  active_plan: 'all' | 'free' | 'pro' | 'enterprise';
 }
 
 interface BulkEmailsState {
@@ -39,6 +40,7 @@ const initialUserFilters: UserFilters = {
   visited_payments_plan: 'all',
   filter_by_job_title: 'all',
   filter_by_heard_from: 'all',
+  active_plan: 'all',
 };
 
 export const useBulkEmailsStore = create<BulkEmailsState>((set) => ({
