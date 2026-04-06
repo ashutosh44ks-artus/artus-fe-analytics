@@ -91,19 +91,20 @@ export function UserPreviewsTable({
           </span>
         ),
       }),
-      // columnHelper.accessor("last_logged_in", {
-      //   header: "Last Seen",
-      //   cell: (info: CellContext<BulkEmailUser, string | undefined>) => {
-      //     const date = info.getValue();
-      //     return (
-      //       <span className="text-sm">
-      //         {date
-      //           ? formatDistanceToNow(new Date(date), { addSuffix: true })
-      //           : "Never"}
-      //       </span>
-      //     );
-      //   },
-      // }),
+      columnHelper.accessor("last_logged_in", {
+        header: "Last Logged In",
+        cell: (info: CellContext<BulkEmailUser, string | undefined>) => {
+          const date = info.getValue(); // e.g. 2026-04-06T12:42:35.647000
+          const utcDate = date ? date.split(".")[0] + "Z" : null; // Ensure it's treated as UTC
+          return (
+            <span className="text-sm">
+              {utcDate
+                ? formatDistanceToNow(new Date(utcDate), { addSuffix: true })
+                : "Never"}
+            </span>
+          );
+        },
+      }),
     ],
     [columnHelper],
   );
