@@ -47,14 +47,16 @@ import EmailTemplateBody from "./EmailTemplateBody";
 
 interface EmailTemplateSelectorProps {
   estimatedUserCount: number;
-  users: BulkEmailUser[];
+  selectedUserCount: number;
+  selectedUsers: BulkEmailUser[];
   dynamicFilters: Conditional[];
   userFilters: UserFilters;
 }
 
 export function EmailTemplateSelector({
   estimatedUserCount,
-  users,
+  selectedUserCount,
+  selectedUsers,
   dynamicFilters,
   userFilters,
 }: EmailTemplateSelectorProps) {
@@ -83,12 +85,12 @@ export function EmailTemplateSelector({
       toast.error("Please select an email template");
       return;
     }
-    if (users.length === 0) {
-      toast.error("No users match the current filters");
+    if (selectedUsers.length === 0) {
+      toast.error("Please select at least one user");
       return;
     }
 
-    const usersAsRecepients = users.map((user) => ({
+    const usersAsRecipients = selectedUsers.map((user) => ({
       email: user.email,
       name: user.user_name,
       templateData: {
@@ -100,7 +102,7 @@ export function EmailTemplateSelector({
 
     mutate({
       templateId: selectedTemplate,
-      recipients: usersAsRecepients,
+      recipients: usersAsRecipients,
     });
   };
 
@@ -154,7 +156,7 @@ export function EmailTemplateSelector({
       <CardHeader>
         <CardTitle>Email Template </CardTitle>
         <CardDescription>
-          Choose a template for your email campaign
+          Choose a template for your email campaign for {selectedUserCount.toLocaleString()} selected user{selectedUserCount === 1 ? "" : "s"}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -182,7 +184,7 @@ export function EmailTemplateSelector({
             onClick={() => setShowConfirmDialog(true)}
             disabled={
               !selectedTemplate ||
-              estimatedUserCount === 0 ||
+              selectedUserCount === 0 ||
               isLoadingEmailTemplates
             }
             className="gap-2 sm:w-auto w-full"
@@ -205,14 +207,14 @@ export function EmailTemplateSelector({
             <AlertDialogTitle>Send Email Campaign?</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to send this email campaign to{" "}
-              {estimatedUserCount.toLocaleString()} users?
+              {selectedUserCount.toLocaleString()} selected user{selectedUserCount === 1 ? "" : "s"}?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="py-4 bg-zinc-900 px-4 rounded-lg">
             <ul className="text-sm space-y-1">
               <li>
                 <strong>Recipients:</strong>{" "}
-                {estimatedUserCount.toLocaleString()} users
+                {selectedUserCount.toLocaleString()} selected of {estimatedUserCount.toLocaleString()} matched users
               </li>
               <li>
                 <strong>Filters Applied:</strong>{" "}
@@ -229,7 +231,7 @@ export function EmailTemplateSelector({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleSendCampaign}
-              disabled={isPending || estimatedUserCount === 0}
+              disabled={isPending || selectedUserCount === 0}
             >
               {isPending ? "Sending..." : "Send Campaign"}
             </AlertDialogAction>

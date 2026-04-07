@@ -1,7 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { CellContext, Header, Row } from "@tanstack/react-table";
+import type {
+  CellContext,
+  Header,
+  OnChangeFn,
+  Row,
+  RowSelectionState,
+} from "@tanstack/react-table";
 import {
   createColumnHelper,
   flexRender,
@@ -21,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -34,12 +41,16 @@ interface UserPreviewsTableProps {
   isLoading?: boolean;
   users: BulkEmailUser[];
   userCount: number;
+  rowSelection: RowSelectionState;
+  onRowSelectionChange: OnChangeFn<RowSelectionState>;
 }
 
 export function UserPreviewsTable({
   isLoading = false,
   users,
   userCount,
+  rowSelection,
+  onRowSelectionChange,
 }: UserPreviewsTableProps) {
   const [{ pageIndex, pageSize }, setPagination] = useState({
     pageIndex: 0,
@@ -58,6 +69,28 @@ export function UserPreviewsTable({
 
   const columns = useMemo(
     () => [
+      columnHelper.display({
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+      }),
       columnHelper.accessor("user_name", {
         header: "User Name",
         cell: (info: CellContext<BulkEmailUser, string>) => (
@@ -94,8 +127,8 @@ export function UserPreviewsTable({
       columnHelper.accessor("last_logged_in", {
         header: "Last Logged In",
         cell: (info: CellContext<BulkEmailUser, string | undefined>) => {
-          const date = info.getValue(); // e.g. 2026-04-06T12:42:35.647000
-          const utcDate = date ? date.split(".")[0] + "Z" : null; // Ensure it's treated as UTC
+          const date = info.getValue(); // e.g. 2026-04-07 06:50:05
+          const utcDate = date ? date + "Z" : null; // Ensure it's treated as UTC
           return (
             <span className="text-sm">
               {utcDate
@@ -112,12 +145,15 @@ export function UserPreviewsTable({
   const table = useReactTable({
     data: users,
     columns,
+    getRowId: (row) => row.user_id,
     state: {
       pagination,
+      rowSelection,
     },
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onRowSelectionChange,
     manualPagination: false,
   });
 
@@ -147,7 +183,7 @@ export function UserPreviewsTable({
         <CardTitle>User Previews</CardTitle>
         <CardDescription>
           {userCount > 0
-            ? `${userCount.toLocaleString()} users will receive this email`
+            ? `${userCount.toLocaleString()} users match the current filters`
             : "No users match the current filters"}
         </CardDescription>
       </CardHeader>
@@ -203,6 +239,10 @@ export function UserPreviewsTable({
         {/* Pagination Controls */}
         <div className="flex items-center justify-between mt-4">
           <div className="text-sm">
+            {table.getFilteredSelectedRowModel().rows.length} of{" "}
+            {table.getFilteredRowModel().rows.length} row(s) selected.
+          </div>
+          <div className="text-sm text-muted-foreground">
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount().toLocaleString()}
           </div>
