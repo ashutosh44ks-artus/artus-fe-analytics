@@ -1,4 +1,5 @@
-import { USER_TEAMS } from "@/lib/constants";
+// import { USER_TEAMS } from "@/lib/constants";
+import { UserStar } from "lucide-react";
 import { MdEmail } from "react-icons/md";
 import {
   PiCellTowerBold,
@@ -41,6 +42,13 @@ export const SIDEBAR_ITEMS_ANALYTICS = [
     key: "bulk-emails",
     label: "Marketing Emails",
     icon: MdEmail,
+    disabled: false,
+    team: "all",
+  },
+  {
+    key: "user-analytics",
+    label: "User Analytics",
+    icon: UserStar,
     disabled: false,
     team: "all",
   }
