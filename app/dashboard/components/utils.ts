@@ -3,8 +3,8 @@ import { UserStar } from "lucide-react";
 import { MdEmail } from "react-icons/md";
 import {
   PiCellTowerBold,
-  PiChartBarFill,
-  PiCheckCircleFill,
+  // PiChartBarFill,
+  // PiCheckCircleFill,
   PiGridFourFill,
 } from "react-icons/pi";
 import { VscFeedback, VscVmActive } from "react-icons/vsc";
@@ -137,7 +137,7 @@ export const formatPercentLabel = (
     typeof denominator !== "number" ||
     denominator <= 0
   ) {
-    return null;
+    return suffix ? `— ${suffix}` : "—";
   }
 
   const percent = Math.round((numerator / denominator) * 100);

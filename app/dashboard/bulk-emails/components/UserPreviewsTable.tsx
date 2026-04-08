@@ -7,12 +7,14 @@ import type {
   OnChangeFn,
   Row,
   RowSelectionState,
+  SortingState,
 } from "@tanstack/react-table";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { BulkEmailUser } from "@/services/bulk-emails";
@@ -23,10 +25,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { formatDistanceToNow } from "date-fns";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
@@ -36,6 +36,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DataTableFooter } from "@/components/DataTable/data-table-footer";
+import { DataTableColumnHeader } from "@/components/DataTable/data-table-column-header";
 
 interface UserPreviewsTableProps {
   isLoading?: boolean;
@@ -52,6 +54,7 @@ export function UserPreviewsTable({
   rowSelection,
   onRowSelectionChange,
 }: UserPreviewsTableProps) {
+  const [sorting, setSorting] = useState<SortingState>([]);
   const [{ pageIndex, pageSize }, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
@@ -92,13 +95,21 @@ export function UserPreviewsTable({
         ),
       }),
       columnHelper.accessor("user_name", {
-        header: "User Name",
+        header: ({ column, table }) => (
+          <DataTableColumnHeader
+            table={table}
+            column={column}
+            title="User Name"
+          />
+        ),
         cell: (info: CellContext<BulkEmailUser, string>) => (
           <span className="font-medium">{info.getValue()}</span>
         ),
       }),
       columnHelper.accessor("email", {
-        header: "Email",
+        header: ({ column, table }) => (
+          <DataTableColumnHeader table={table} column={column} title="Email" />
+        ),
         cell: (info: CellContext<BulkEmailUser, string>) => (
           <a
             href={`mailto:${info.getValue()}`}
@@ -109,13 +120,25 @@ export function UserPreviewsTable({
         ),
       }),
       columnHelper.accessor("job_title", {
-        header: "Job Title",
+        header: ({ column, table }) => (
+          <DataTableColumnHeader
+            table={table}
+            column={column}
+            title="Job Title"
+          />
+        ),
         cell: (info: CellContext<BulkEmailUser, string>) => (
           <span className="text-sm">{info.getValue()}</span>
         ),
       }),
       columnHelper.accessor("credits", {
-        header: "Credits",
+        header: ({ column, table }) => (
+          <DataTableColumnHeader
+            table={table}
+            column={column}
+            title="Credits"
+          />
+        ),
         cell: (info: CellContext<BulkEmailUser, number>) => (
           <span className="text-sm">
             {typeof info.getValue() === "number"
@@ -125,7 +148,13 @@ export function UserPreviewsTable({
         ),
       }),
       columnHelper.accessor("last_logged_in", {
-        header: "Last Logged In",
+        header: ({ column, table }) => (
+          <DataTableColumnHeader
+            table={table}
+            column={column}
+            title="Last Logged In"
+          />
+        ),
         cell: (info: CellContext<BulkEmailUser, string | undefined>) => {
           const date = info.getValue(); // e.g. 2026-04-07 06:50:05
           const utcDate = date ? date + "Z" : null; // Ensure it's treated as UTC
@@ -149,10 +178,13 @@ export function UserPreviewsTable({
     state: {
       pagination,
       rowSelection,
+      sorting,
     },
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange,
     manualPagination: false,
   });
@@ -188,84 +220,55 @@ export function UserPreviewsTable({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto border rounded-xl">
-          <Table className="w-full text-sm">
-            <TableHeader className="bg-slate-900 hover:bg-slate-900">
-              <TableRow>
-                {table
-                  .getHeaderGroups()[0]
-                  ?.headers.map((header: Header<BulkEmailUser, unknown>) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext(),
-                            )}
-                      </TableHead>
-                    );
-                  })}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows.length === 0 ? (
+        <div className="space-y-4">
+          <div className="overflow-x-auto border rounded-xl">
+            <Table className="w-full text-sm">
+              <TableHeader className="bg-slate-900 hover:bg-slate-900">
                 <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="text-center py-8"
-                  >
-                    No users to display
-                  </TableCell>
+                  {table
+                    .getHeaderGroups()[0]
+                    ?.headers.map((header: Header<BulkEmailUser, unknown>) => {
+                      return (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
+                        </TableHead>
+                      );
+                    })}
                 </TableRow>
-              ) : (
-                table.getRowModel().rows.map((row: Row<BulkEmailUser>) => (
-                  <TableRow key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </TableCell>
-                    ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="text-center py-8"
+                    >
+                      No users to display
+                    </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </div>
-
-        {/* Pagination Controls */}
-        <div className="flex items-center justify-between mt-4">
-          <div className="text-sm">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
+                ) : (
+                  table.getRowModel().rows.map((row: Row<BulkEmailUser>) => (
+                    <TableRow key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
           </div>
-          <div className="text-sm text-muted-foreground">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount().toLocaleString()}
-          </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              <ChevronLeft className="w-4 h-4" />
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-              <ChevronRight className="w-4 h-4" />
-            </Button>
-          </div>
+          <DataTableFooter table={table} />
         </div>
       </CardContent>
     </Card>

@@ -44,6 +44,13 @@ export interface SessionAnalyticsTrendsDataSuccessResponse {
       date: string;
       count: number;
     }[];
+    page_visits_over_time: {
+      page: string;
+      avg_duration: number;
+      session_ends: number;
+      total_visits: number;
+      unique_visitors: number;
+    }[];
   };
 }
 export const getSessionAnalyticsTrendsData = async (

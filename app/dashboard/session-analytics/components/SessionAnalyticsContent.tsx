@@ -2,6 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { type SessionAnalyticsTrendsPeriod } from "./utils";
 import { SessionAnalyticsTrendsDataSuccessResponse } from "@/services/session-analytics";
 import TrendCard, { EmptyState } from "@/app/dashboard/components/TrendCard";
+import PageVisitsTableCard from "./PageVisitsTableCard";
 import {
   ChartContainer,
   ChartTooltip,
@@ -14,8 +15,11 @@ import {
 } from "@/app/dashboard/components/utils";
 
 interface SessionAnalyticsContentProps {
-  data:
+  sessionData:
     | SessionAnalyticsTrendsDataSuccessResponse["trends"]["sessions_over_time"]
+    | undefined;
+  pageVisitData:
+    | SessionAnalyticsTrendsDataSuccessResponse["trends"]["page_visits_over_time"]
     | undefined;
   period: SessionAnalyticsTrendsPeriod;
   isLoading: boolean;
@@ -23,12 +27,13 @@ interface SessionAnalyticsContentProps {
 }
 
 const SessionAnalyticsContent = ({
-  data,
+  sessionData,
+  pageVisitData,
   period,
   isLoading,
   error,
 }: SessionAnalyticsContentProps) => {
-  const hasAnyData = data !== undefined && data.length > 0;
+  const hasAnyData = sessionData !== undefined && pageVisitData !== undefined;
 
   if (isLoading && !hasAnyData) {
     return (
@@ -65,12 +70,12 @@ const SessionAnalyticsContent = ({
         </div>
       ) : null}
 
-      <div>
+      <div className="flex flex-col gap-4">
         <TrendCard
-          title={`Sessions Over Time`}
+          title="Sessions Over Time"
           description={`Number of sessions over the ${period.split("_").join(" ")}.`}
         >
-          {data.length === 0 ? (
+          {sessionData.length === 0 ? (
             <EmptyState message="No trend data is available yet." />
           ) : (
             <ChartContainer
@@ -81,7 +86,7 @@ const SessionAnalyticsContent = ({
               }}
               className="aspect-auto h-45 w-full"
             >
-              <LineChart data={data} margin={{ left: 8, right: 8 }}>
+              <LineChart data={sessionData} margin={{ left: 8, right: 8 }}>
                 <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="date"
@@ -121,6 +126,7 @@ const SessionAnalyticsContent = ({
             </ChartContainer>
           )}
         </TrendCard>
+        <PageVisitsTableCard pageVisitData={pageVisitData} period={period} />
       </div>
     </div>
   );

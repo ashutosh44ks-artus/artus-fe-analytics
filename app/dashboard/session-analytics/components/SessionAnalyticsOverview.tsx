@@ -2,6 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Activity, CalendarClock, FolderKanban, Users } from "lucide-react";
 import StatCard from "@/app/dashboard/components/StatCard";
 import { SessionAnalyticsSummaryDataSuccessResponse } from "@/services/session-analytics";
+import { formatMsToTime } from "@/lib/utils";
 
 interface SessionAnalyticsProps {
   data: SessionAnalyticsSummaryDataSuccessResponse["summary"] | undefined;
@@ -42,14 +43,7 @@ const SessionAnalyticsOverview = ({
         />
         <StatCard
           label="Avg. Session Duration"
-          value={
-            data.avg_session_length_ms >= 60000
-              ? `${Math.floor(data.avg_session_length_ms / 60000)}m ${(
-                  (data.avg_session_length_ms % 60000) /
-                  1000
-                ).toFixed(0)}s`
-              : `${(data.avg_session_length_ms / 1000).toFixed(2)}s`
-          }
+          value={formatMsToTime(data.avg_session_length_ms)}
           subLabel="Average length of sessions"
           Icon={CalendarClock}
           tone="blue"

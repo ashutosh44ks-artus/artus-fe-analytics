@@ -125,7 +125,8 @@ const Page = () => {
         />
         <div>
           <SessionAnalyticsContent
-            data={trendsData?.sessions_over_time}
+            sessionData={trendsData?.sessions_over_time}
+            pageVisitData={trendsData?.page_visits_over_time}
             period={trendsPeriod}
             isLoading={isTrendsLoading}
             error={trendsError}
