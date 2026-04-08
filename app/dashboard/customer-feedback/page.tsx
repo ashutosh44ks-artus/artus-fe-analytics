@@ -13,7 +13,7 @@ import { AxiosError } from "axios";
 import FeedbackOverview from "./components/FeedbackOverview";
 
 const Page = () => {
-  const { data, isLoading, error } = useQuery<
+  const { data, isFetching, error } = useQuery<
     CustomerFeedbackDataSuccessResponse["feedback"],
     AxiosError
   >({
@@ -39,7 +39,7 @@ const Page = () => {
         {/* add filters here in the future */}
       </header>
       <main className="p-4 flex-1">
-        <FeedbackOverview data={data} isLoading={isLoading} error={error} />
+        <FeedbackOverview data={data} isLoading={isFetching} error={error} />
         <div>
           <div className="mb-3 flex justify-between items-center">
             <p className="text-xs opacity-75 uppercase font-medium flex items-center gap-2">
@@ -50,7 +50,7 @@ const Page = () => {
               Sorted by: <span className="font-medium">Most Recent</span>
             </p>
           </div>
-          <FeedbackContent data={data} isLoading={isLoading} error={error} />
+          <FeedbackContent data={data} isLoading={isFetching} error={error} />
         </div>
       </main>
     </div>
