@@ -5,14 +5,16 @@ import {
   type UserAnalyticsSummaryDataSuccessResponse,
 } from "@/services/user-analytics";
 import {
-  formatMetricValue,
-  formatPercentLabel,
   mergeTrendSeriesByDate,
   type UserAnalyticsTrendsByMetric,
   type UserAnalyticsTrendsPeriod,
 } from "./utils";
 import ComparisonChartCard from "./ComparisonChartCard";
 import IndividualTrendCard from "./IndividualTrendCard";
+import {
+  formatMetricValue,
+  formatPercentLabel,
+} from "@/app/dashboard/components/utils";
 
 interface UserAnalyticsContentProps {
   data: UserAnalyticsTrendsByMetric | undefined;
@@ -41,11 +43,7 @@ const UserAnalyticsContent = ({
   const activationData = useMemo(
     () =>
       mergeTrendSeriesByDate(
-        [
-          "total_users",
-          "partially_activated_users",
-          "fully_activated_users",
-        ],
+        ["total_users", "partially_activated_users", "fully_activated_users"],
         data ?? {},
       ),
     [data],
@@ -105,7 +103,7 @@ const UserAnalyticsContent = ({
   const activationBadge =
     fullyActivatedBadge && partiallyActivatedBadge
       ? `${fullyActivatedBadge} • ${partiallyActivatedBadge}`
-      : fullyActivatedBadge ?? partiallyActivatedBadge ?? period;
+      : (fullyActivatedBadge ?? partiallyActivatedBadge ?? period);
   const engagementBadge = summaryData
     ? `${formatMetricValue(summaryData.mau)} MAU`
     : period;

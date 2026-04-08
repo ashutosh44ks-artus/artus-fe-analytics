@@ -63,13 +63,21 @@ const StatCard = ({
       )}
     >
       <div className="flex items-center justify-between">
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">
+          {label}
+        </p>
         <span className={cn("rounded-md border p-1", selectedTone.iconWrap)}>
           <Icon className={cn("size-3.5", selectedTone.icon)} />
         </span>
       </div>
       <div className="flex items-center gap-2">
-        <p className={cn("text-2xl font-semibold leading-none", selectedTone.value)}>
+        <p
+          className={cn(
+            "text-2xl font-semibold leading-none truncate",
+            selectedTone.value,
+          )}
+          title={value}
+        >
           {value}
         </p>
         {trendIcon ? (
@@ -88,7 +96,9 @@ const StatCard = ({
           </span>
         ) : null}
       </div>
-      {subLabel ? <p className="text-xs text-muted-foreground">{subLabel}</p> : null}
+      {subLabel ? (
+        <p className="text-xs text-muted-foreground">{subLabel}</p>
+      ) : null}
     </div>
   );
 };

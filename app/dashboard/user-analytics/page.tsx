@@ -24,12 +24,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  getTrendDirection,
   UserAnalyticsTrendsByMetric,
   UserAnalyticsTrendsPeriod,
   UserAnalyticsTrendsPeriodOptions,
 } from "./components/utils";
 import { useState } from "react";
+import { getTrendDirection } from "@/app/dashboard/components/utils";
 
 interface FilterSelectProps {
   label: string;
@@ -96,16 +96,17 @@ const Page = () => {
   });
 
   // Merge trend data into a single object keyed by metric for easier access in the content component
-  const detailedData = userAnalyticsMetricKeys.reduce<UserAnalyticsTrendsByMetric>(
-    (accumulator, metric, index) => {
-      const series = trendQueries[index]?.data;
-      if (series) {
-        accumulator[metric] = series;
-      }
-      return accumulator;
-    },
-    {},
-  );
+  const detailedData =
+    userAnalyticsMetricKeys.reduce<UserAnalyticsTrendsByMetric>(
+      (accumulator, metric, index) => {
+        const series = trendQueries[index]?.data;
+        if (series) {
+          accumulator[metric] = series;
+        }
+        return accumulator;
+      },
+      {},
+    );
 
   const trendDirections = userAnalyticsMetricKeys.reduce<
     Partial<Record<UserAnalyticsMetric, StatCardTrendDirection>>
@@ -120,7 +121,8 @@ const Page = () => {
   }, {});
 
   const isDetailedDataLoading = trendQueries.some((query) => query.isLoading);
-  const detailedDataError = trendQueries.find((query) => query.error)?.error ?? null;
+  const detailedDataError =
+    trendQueries.find((query) => query.error)?.error ?? null;
 
   return (
     <div className="min-h-0 flex-1 flex flex-col relative">

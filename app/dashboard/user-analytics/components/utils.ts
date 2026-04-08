@@ -1,10 +1,8 @@
-import { format, parseISO } from "date-fns";
 import type {
   UserAnalyticsMetric,
   UserAnalyticsTrendsDataSuccessResponse,
 } from "@/services/user-analytics";
 import { ChartConfig } from "@/components/ui/chart";
-import { StatCardTrendDirection } from "../../components/StatCard";
 
 export const UserAnalyticsTrendsPeriodOptions = [
   { label: "Weekly", value: "weekly" },
@@ -164,59 +162,6 @@ export const mergeTrendSeriesByDate = (
   );
 };
 
-// BELOW CAN BE MOVED TO A MORE CENTRAL UTILS FILE IF NEEDED BY OTHER PARTS OF THE APP
-
-// formats date labels for trends charts axes
-// e.g. "Jan 5" for monthly, "Mon" for weekly, "Jan" for yearly
-export const formatTrendDateLabel = (
-  value: string,
-  period: UserAnalyticsTrendsPeriod,
-) => {
-  try {
-    const parsedDate = parseISO(value);
-    const pattern =
-      period === "weekly" ? "EEE" : period === "monthly" ? "MMM d" : "MMM";
-
-    return format(parsedDate, pattern);
-  } catch {
-    return value;
-  }
-};
-
-// handles null and undefined values gracefully by returning "—" instead of "0" or "NaN"
-// formats numbers with commas for thousands separators for better readability
-export const formatMetricValue = (value: number | null | undefined) =>
-  typeof value === "number" ? value.toLocaleString() : "—";
-
-// handles rounding, formatting to compact notation (e.g., 1.2K, 3.4M), and gracefully handles non-numeric values
-export const formatCompactMetricValue = (value: number | string) => {
-  if (typeof value !== "number") {
-    return value;
-  }
-
-  return new Intl.NumberFormat("en", {
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(value);
-};
-
-export const formatPercentLabel = (
-  numerator?: number,
-  denominator?: number,
-  suffix?: string,
-) => {
-  if (
-    typeof numerator !== "number" ||
-    typeof denominator !== "number" ||
-    denominator <= 0
-  ) {
-    return null;
-  }
-
-  const percent = Math.round((numerator / denominator) * 100);
-  return suffix ? `${percent}% ${suffix}` : `${percent}%`;
-};
-
 export const buildChartConfig = (
   metrics: readonly UserAnalyticsMetric[],
 ): ChartConfig => {
@@ -230,28 +175,4 @@ export const buildChartConfig = (
 
     return config;
   }, {});
-};
-export const getTrendDirection = (
-  series?: UserAnalyticsTrendsByMetric[UserAnalyticsMetric],
-): StatCardTrendDirection | undefined => {
-  if (!series || series.length < 2) {
-    return undefined;
-  }
-
-  const previousCount = series.at(-2)?.count;
-  const currentCount = series.at(-1)?.count;
-
-  if (typeof previousCount !== "number" || typeof currentCount !== "number") {
-    return undefined;
-  }
-
-  if (currentCount > previousCount) {
-    return "up";
-  }
-
-  if (currentCount < previousCount) {
-    return "down";
-  }
-
-  return "flat";
 };
