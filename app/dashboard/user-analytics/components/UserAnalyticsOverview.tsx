@@ -1,4 +1,7 @@
-import { UserAnalyticsSummaryDataSuccessResponse } from "@/services/user-analytics";
+import {
+  UserAnalyticsMetric,
+  UserAnalyticsSummaryDataSuccessResponse,
+} from "@/services/user-analytics";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Activity,
@@ -10,17 +13,21 @@ import {
   UserMinus,
   Users,
 } from "lucide-react";
-import StatCard from "@/app/dashboard/components/StatCard";
+import StatCard, {
+  type StatCardTrendDirection,
+} from "@/app/dashboard/components/StatCard";
 
 interface UserAnalyticsProps {
   data: UserAnalyticsSummaryDataSuccessResponse["summary"] | undefined;
   isLoading: boolean;
   error: unknown;
+  trendDirections?: Partial<Record<UserAnalyticsMetric, StatCardTrendDirection>>;
 }
 const UserAnalyticsOverview = ({
   data,
   isLoading,
   error,
+  trendDirections,
 }: UserAnalyticsProps) => {
   if (isLoading) {
     return (
@@ -39,7 +46,7 @@ const UserAnalyticsOverview = ({
   return (
     <div>
       <p className="mb-3 text-xs opacity-75 uppercase font-medium flex items-center gap-2">
-        Overview (all time)
+        All Time Stats with Trend Indicators
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-4">
         <StatCard
@@ -48,6 +55,7 @@ const UserAnalyticsOverview = ({
           subLabel="All registered users"
           Icon={Users}
           tone="amber"
+          trendDirection={trendDirections?.total_users}
         />
         <StatCard
           label="Daily Active Users (DAU)"
@@ -55,6 +63,7 @@ const UserAnalyticsOverview = ({
           subLabel="Users active in the last day"
           Icon={Activity}
           tone="blue"
+          trendDirection={trendDirections?.dau}
         />
         <StatCard
           label="Weekly Active Users (WAU)"
@@ -62,6 +71,7 @@ const UserAnalyticsOverview = ({
           subLabel="Users active in the last week"
           Icon={CalendarDays}
           tone="blue"
+          trendDirection={trendDirections?.wau}
         />
         <StatCard
           label="Monthly Active Users (MAU)"
@@ -69,6 +79,7 @@ const UserAnalyticsOverview = ({
           subLabel="Users active in the last month"
           Icon={CalendarClock}
           tone="blue"
+          trendDirection={trendDirections?.mau}
         />
         <StatCard
           label="Paid Users"
@@ -76,6 +87,7 @@ const UserAnalyticsOverview = ({
           subLabel="Users with active subscriptions"
           Icon={CreditCard}
           tone="amber"
+          trendDirection={trendDirections?.paid_users}
         />
         <StatCard
           label="Partially Activated Users"
@@ -83,6 +95,7 @@ const UserAnalyticsOverview = ({
           subLabel="Users that created a project but didn't generate any designs"
           Icon={UserMinus}
           tone="rose"
+          trendDirection={trendDirections?.partially_activated_users}
         />
         <StatCard
           label="Fully Activated Users"
@@ -90,6 +103,7 @@ const UserAnalyticsOverview = ({
           subLabel="Users that created a project and generated at least one design"
           Icon={UserCheck}
           tone="emerald"
+          trendDirection={trendDirections?.fully_activated_users}
         />
         <StatCard
           label="Total Projects"
@@ -97,6 +111,7 @@ const UserAnalyticsOverview = ({
           subLabel="Projects created by users"
           Icon={FolderKanban}
           tone="blue"
+          trendDirection={trendDirections?.total_projects}
         />
       </div>
     </div>

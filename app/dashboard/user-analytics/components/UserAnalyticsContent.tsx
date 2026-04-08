@@ -41,7 +41,11 @@ const UserAnalyticsContent = ({
   const activationData = useMemo(
     () =>
       mergeTrendSeriesByDate(
-        ["partially_activated_users", "fully_activated_users"],
+        [
+          "total_users",
+          "partially_activated_users",
+          "fully_activated_users",
+        ],
         data ?? {},
       ),
     [data],
@@ -88,12 +92,20 @@ const UserAnalyticsContent = ({
       summaryData?.total_users,
       "paid",
     ) ?? period;
+  const fullyActivatedBadge = formatPercentLabel(
+    summaryData?.fully_activated_users,
+    summaryData?.total_users,
+    "fully",
+  );
+  const partiallyActivatedBadge = formatPercentLabel(
+    summaryData?.partially_activated_users,
+    summaryData?.total_users,
+    "partial",
+  );
   const activationBadge =
-    formatPercentLabel(
-      summaryData?.fully_activated_users,
-      summaryData?.total_users,
-      "fully activated",
-    ) ?? period;
+    fullyActivatedBadge && partiallyActivatedBadge
+      ? `${fullyActivatedBadge} • ${partiallyActivatedBadge}`
+      : fullyActivatedBadge ?? partiallyActivatedBadge ?? period;
   const engagementBadge = summaryData
     ? `${formatMetricValue(summaryData.mau)} MAU`
     : period;
@@ -124,12 +136,15 @@ const UserAnalyticsContent = ({
           />
           <ComparisonChartCard
             title="Activation Trends"
-            description="Track onboarding progression from partially activated users to fully activated users."
-            metrics={["partially_activated_users", "fully_activated_users"]}
+            description="Compare total users with partially and fully activated users to see how onboarding conversion evolves over time."
+            metrics={[
+              "total_users",
+              "partially_activated_users",
+              "fully_activated_users",
+            ]}
             chartData={activationData}
             period={period}
             badge={activationBadge}
-            variant="area"
           />
           <ComparisonChartCard
             title="Monetization Trends"

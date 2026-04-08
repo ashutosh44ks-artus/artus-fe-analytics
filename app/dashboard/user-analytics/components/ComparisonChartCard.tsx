@@ -157,8 +157,14 @@ const ComparisonChartCard = ({
                     type="monotone"
                     dataKey={metric}
                     stroke={`var(--color-${metric})`}
-                    strokeWidth={2.5}
+                    strokeWidth={metric === "total_users" ? 3 : 2.5}
+                    strokeDasharray={
+                      metrics.length > 2 && metric === "total_users"
+                        ? "6 4"
+                        : undefined
+                    }
                     dot={false}
+                    activeDot={{ r: metric === "total_users" ? 4 : 3 }}
                     connectNulls
                   />
                 ))}

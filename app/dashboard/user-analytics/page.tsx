@@ -6,9 +6,11 @@ import { Separator } from "@/components/ui/separator";
 import UserAnalyticsContent from "./components/UserAnalyticsContent";
 import { AxiosError } from "axios";
 import UserAnalyticsOverview from "./components/UserAnalyticsOverview";
+import type { StatCardTrendDirection } from "@/app/dashboard/components/StatCard";
 import {
   getUserAnalyticsSummaryData,
   getUserAnalyticsTrendsData,
+  UserAnalyticsMetric,
   userAnalyticsDataQueryKeys,
   userAnalyticsMetricKeys,
   UserAnalyticsSummaryDataSuccessResponse,
@@ -22,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  getTrendDirection,
   UserAnalyticsTrendsByMetric,
   UserAnalyticsTrendsPeriod,
   UserAnalyticsTrendsPeriodOptions,
@@ -104,6 +107,18 @@ const Page = () => {
     {},
   );
 
+  const trendDirections = userAnalyticsMetricKeys.reduce<
+    Partial<Record<UserAnalyticsMetric, StatCardTrendDirection>>
+  >((accumulator, metric) => {
+    const direction = getTrendDirection(detailedData[metric]);
+
+    if (direction) {
+      accumulator[metric] = direction;
+    }
+
+    return accumulator;
+  }, {});
+
   const isDetailedDataLoading = trendQueries.some((query) => query.isLoading);
   const detailedDataError = trendQueries.find((query) => query.error)?.error ?? null;
 
@@ -131,6 +146,7 @@ const Page = () => {
           data={summaryData}
           isLoading={isSummaryLoading}
           error={summaryError}
+          trendDirections={trendDirections}
         />
         <div>
           <UserAnalyticsContent

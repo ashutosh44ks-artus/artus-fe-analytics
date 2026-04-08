@@ -4,6 +4,7 @@ import type {
   UserAnalyticsTrendsDataSuccessResponse,
 } from "@/services/user-analytics";
 import { ChartConfig } from "@/components/ui/chart";
+import { StatCardTrendDirection } from "../../components/StatCard";
 
 export const UserAnalyticsTrendsPeriodOptions = [
   { label: "Weekly", value: "weekly" },
@@ -87,45 +88,51 @@ export const analyticsActiveUsersLabels = {
   weekly: {
     dau: {
       label: "Daily Active Users",
-      description: "Unique users active on each day over the last 7 days."
+      description: "Unique users active on each day over the last 7 days.",
     },
     wau: {
       label: "Weekly Active Users",
-      description: "Unique users active in the trailing 7-day window for each day shown."
+      description:
+        "Unique users active in the trailing 7-day window for each day shown.",
     },
     mau: {
       label: "Monthly Active Users",
-      description: "Unique users active in the trailing 30-day window for each day shown."
-    }
+      description:
+        "Unique users active in the trailing 30-day window for each day shown.",
+    },
   },
   monthly: {
     dau: {
       label: "Daily Active Users",
-      description: "Unique users active on each day over the last 30 days."
+      description: "Unique users active on each day over the last 30 days.",
     },
     wau: {
       label: "Weekly Active Users",
-      description: "Unique users active in the trailing 7-day window for each day shown."
+      description:
+        "Unique users active in the trailing 7-day window for each day shown.",
     },
     mau: {
       label: "Monthly Active Users",
-      description: "Unique users active in the trailing 30-day window for each day shown."
-    }
+      description:
+        "Unique users active in the trailing 30-day window for each day shown.",
+    },
   },
   yearly: {
     dau: {
       label: "Average Daily Active Users",
-      description: "Average number of unique users active per day in each month."
+      description:
+        "Average number of unique users active per day in each month.",
     },
     wau: {
       label: "Average Weekly Active Users",
-      description: "Average number of unique users active per week in each month."
+      description:
+        "Average number of unique users active per week in each month.",
     },
     mau: {
       label: "Monthly Active Users",
-      description: "Unique users active during each calendar month."
-    }
-  }
+      description: "Unique users active during each calendar month.",
+    },
+  },
 };
 
 /**
@@ -157,9 +164,7 @@ export const mergeTrendSeriesByDate = (
   );
 };
 
-
 // BELOW CAN BE MOVED TO A MORE CENTRAL UTILS FILE IF NEEDED BY OTHER PARTS OF THE APP
-
 
 // formats date labels for trends charts axes
 // e.g. "Jan 5" for monthly, "Mon" for weekly, "Jan" for yearly
@@ -225,4 +230,28 @@ export const buildChartConfig = (
 
     return config;
   }, {});
+};
+export const getTrendDirection = (
+  series?: UserAnalyticsTrendsByMetric[UserAnalyticsMetric],
+): StatCardTrendDirection | undefined => {
+  if (!series || series.length < 2) {
+    return undefined;
+  }
+
+  const previousCount = series.at(-2)?.count;
+  const currentCount = series.at(-1)?.count;
+
+  if (typeof previousCount !== "number" || typeof currentCount !== "number") {
+    return undefined;
+  }
+
+  if (currentCount > previousCount) {
+    return "up";
+  }
+
+  if (currentCount < previousCount) {
+    return "down";
+  }
+
+  return "flat";
 };
