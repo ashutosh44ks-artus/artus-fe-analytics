@@ -81,6 +81,12 @@ export const USER_ANALYTICS_METRIC_META: Record<
     description: "Users who completed onboarding and used the product",
     color: "#14b8a6",
   },
+  new_signups: {
+    label: "New Signups",
+    shortLabel: "Signups",
+    description: "Users who registered in the last period",
+    color: "#eab308",
+  },
 };
 export const analyticsActiveUsersLabels = {
   weekly: {

@@ -20,12 +20,13 @@ export interface UserAnalyticsSummaryDataSuccessResponse {
 }
 
 export type UserAnalyticsMetric =
-  keyof UserAnalyticsSummaryDataSuccessResponse["summary"];
+  keyof UserAnalyticsSummaryDataSuccessResponse["summary"] | "new_signups";
 
 export const userAnalyticsMetricKeys = [
   "total_users",
   "total_projects",
   "paid_users",
+  "new_signups",
   "dau",
   "wau",
   "mau",

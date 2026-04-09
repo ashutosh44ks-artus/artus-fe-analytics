@@ -112,7 +112,10 @@ const PageVisitsTableCard = ({
         header: ({ column, table }) => (
           <DataTableColumnHeader table={table} column={column} title="Avg Duration" />
         ),
-        cell: (info) => formatMsToTime(info.getValue()),
+        cell: (info) => {
+          const value = formatMsToTime(info.getValue());
+          return value === "0s" ? "~0s" : value;
+        },
       }),
     ],
     [columnHelper],

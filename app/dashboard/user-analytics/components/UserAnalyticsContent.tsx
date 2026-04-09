@@ -37,7 +37,7 @@ const UserAnalyticsContent = ({
 
   // Comparison charts data preparation
   const engagementData = useMemo(
-    () => mergeTrendSeriesByDate(["dau", "wau", "mau"], data ?? {}),
+    () => mergeTrendSeriesByDate(["dau", "wau", "mau", "new_signups"], data ?? {}),
     [data],
   );
   const activationData = useMemo(
@@ -127,7 +127,7 @@ const UserAnalyticsContent = ({
           <ComparisonChartCard
             title="Engagement Trends"
             description="Compare short-, medium-, and long-window engagement to understand retention and stickiness."
-            metrics={["dau", "wau", "mau"]}
+            metrics={["dau", "wau", "mau", "new_signups"]}
             chartData={engagementData}
             period={period}
             badge={engagementBadge}
