@@ -136,15 +136,11 @@ export function UserPreviewsTable({
           <DataTableColumnHeader
             table={table}
             column={column}
-            title="Credits"
+            title="Credits Remaining"
           />
         ),
         cell: (info: CellContext<BulkEmailUser, number>) => (
-          <span className="text-sm">
-            {typeof info.getValue() === "number"
-              ? info.getValue().toFixed(1)
-              : info.getValue()}
-          </span>
+          <span className="text-sm">{info.getValue()}%</span>
         ),
       }),
       columnHelper.accessor("last_logged_in", {
