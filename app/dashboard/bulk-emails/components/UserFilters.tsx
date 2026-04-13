@@ -54,6 +54,10 @@ export function UserFilters() {
               <SelectItem value="last_24_hours">Last 24 Hours</SelectItem>
               <SelectItem value="last_7_days">Last 7 Days</SelectItem>
               <SelectItem value="last_30_days">Last 30 Days</SelectItem>
+              <SelectItem value="before_24_hours">Before 24 Hours Ago</SelectItem>
+              <SelectItem value="before_7_days">Before 7 Days Ago</SelectItem>
+              <SelectItem value="before_30_days">Before 30 Days Ago</SelectItem>
+              <SelectItem value="before_60_days">Before 60 Days Ago</SelectItem>
             </SelectContent>
           </Select>
         </div>

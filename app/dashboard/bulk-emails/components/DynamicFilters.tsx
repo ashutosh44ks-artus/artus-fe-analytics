@@ -29,6 +29,7 @@ import {
   validateConditional,
 } from "./utils";
 import { X, Plus } from "lucide-react";
+import { TbAlertTriangle } from "react-icons/tb";
 
 const AVAILABLE_METRICS = [
   "Total Users",
@@ -230,8 +231,8 @@ export function DynamicFilters() {
 
           {/* Error Message */}
           {formError && (
-            <p className="text-sm text-red-600 flex items-center gap-2">
-              <span className="inline-block">⚠️</span> {formError}
+            <p className="text-sm text-red-400 flex items-center gap-2">
+              <TbAlertTriangle /> {formError}
             </p>
           )}
         </div>
