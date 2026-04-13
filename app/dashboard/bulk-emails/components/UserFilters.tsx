@@ -62,6 +62,27 @@ export function UserFilters() {
           </Select>
         </div>
 
+        {/* Signed Up Filter */}
+        <div className="space-y-2">
+          <Label htmlFor="signed-up">Signed Up</Label>
+          <Select
+            value={userFilters.filter_by_signed_up}
+            onValueChange={(
+              value: "all" | "last_24_hours" | "last_7_days" | "last_30_days",
+            ) => setUserFilter("filter_by_signed_up", value)}
+          >
+            <SelectTrigger id="signed-up" className="w-full">
+              <SelectValue placeholder="Select time period" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Users</SelectItem>
+              <SelectItem value="last_24_hours">Last 24 Hours</SelectItem>
+              <SelectItem value="last_7_days">Last 7 Days</SelectItem>
+              <SelectItem value="last_30_days">Last 30 Days</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         {/* Credits Status Filter */}
         <div className="space-y-2">
           <Label htmlFor="credits-status">Credits Status</Label>

@@ -8,6 +8,7 @@ export interface Conditional {
 
 export interface UserFilters {
   filter_by_last_logged_in: 'all' | 'last_24_hours' | 'last_7_days' | 'last_30_days';
+  filter_by_signed_up: 'all' | 'last_24_hours' | 'last_7_days' | 'last_30_days';
   credits_status: 'all' | 'ran_out_of_credits' | 'credits_expired';
   visited_payments_plan: 'all' | 'yes' | 'no';
   filter_by_job_title: string;
@@ -36,6 +37,7 @@ interface BulkEmailsState {
 
 const initialUserFilters: UserFilters = {
   filter_by_last_logged_in: 'all',
+  filter_by_signed_up: 'all',
   credits_status: 'all',
   visited_payments_plan: 'all',
   filter_by_job_title: 'all',

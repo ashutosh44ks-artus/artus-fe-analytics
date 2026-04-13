@@ -31,6 +31,7 @@ export interface LunaUsersListResponse {
   user_name: string;
   applied_filters: {
     filter_by_last_logged_in: string;
+    filter_by_signed_up: string;
     credits_status: string;
     visited_payments_plan: string;
     filter_by_job_title: string;
