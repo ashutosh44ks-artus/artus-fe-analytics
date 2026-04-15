@@ -8,7 +8,7 @@ import type { OnChangeFn, RowSelectionState } from "@tanstack/react-table";
 import { UserFilters } from "./components/UserFilters";
 import { DynamicFilters } from "./components/DynamicFilters";
 import { UserPreviewsTable } from "./components/UserPreviewsTable";
-import { EmailTemplateSelector } from "./components/EmailTemplateSelector";
+import { SendEmailCard } from "./components/SendEmailCard";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -93,8 +93,8 @@ export default function BulkEmailsPage() {
         />
         <Separator />
 
-        {/* Email Template Section */}
-        <EmailTemplateSelector
+        {/* Send Email Section */}
+        <SendEmailCard
           estimatedUserCount={estimatedUserCount}
           selectedUserCount={selectedUserCount}
           selectedUsers={selectedUsers}

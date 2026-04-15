@@ -66,7 +66,6 @@ export const sendBulkEmail = async ({
   templateId,
   recipients,
 }: SendBulkEmailRequest): Promise<PostmarkBatchResponseItem[]> => {
-  await getCookie("luna_auth_token");
   const token = await getCookie("luna_auth_token");
 
   if (!token) {
@@ -77,6 +76,41 @@ export const sendBulkEmail = async ({
     "/emails/templates/send/bulk",
     {
       templateId,
+      templateData: supportedTemplateModelFieldValuePairs,
+      recipients: recipients.map((user) => ({
+        email: user.email,
+        name: user.name,
+        templateData: user.templateData,
+      })),
+      token,
+    },
+    {
+      timeout: 60000, // Set a timeout of 60 seconds for this request
+    },
+  );
+};
+
+export interface SendCustomEmailRequest {
+  subject: string;
+  htmlBody: string;
+  recipients: BulkRecipient[];
+}
+export const sendCustomEmail = async ({
+  subject,
+  htmlBody,
+  recipients,
+}: SendCustomEmailRequest): Promise<PostmarkBatchResponseItem[]> => {
+  const token = await getCookie("luna_auth_token");
+
+  if (!token) {
+    throw new Error("Luna auth token is missing");
+  }
+
+  return await apiClient.post<PostmarkBatchResponseItem[]>(
+    "/emails/custom/send",
+    {
+      subject,
+      body: htmlBody,
       templateData: supportedTemplateModelFieldValuePairs,
       recipients: recipients.map((user) => ({
         email: user.email,
