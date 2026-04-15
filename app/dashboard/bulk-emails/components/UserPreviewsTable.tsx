@@ -13,6 +13,8 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  ColumnFiltersState,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -38,6 +40,7 @@ import {
 } from "@/components/ui/table";
 import { DataTableFooter } from "@/components/DataTable/data-table-footer";
 import { DataTableColumnHeader } from "@/components/DataTable/data-table-column-header";
+import { Input } from "@/components/ui/input";
 
 interface UserPreviewsTableProps {
   isLoading?: boolean;
@@ -59,6 +62,7 @@ export function UserPreviewsTable({
     pageIndex: 0,
     pageSize: 10,
   });
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const pagination = useMemo(
     () => ({
@@ -175,10 +179,13 @@ export function UserPreviewsTable({
       pagination,
       rowSelection,
       sorting,
+      columnFilters,
     },
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange,
@@ -207,13 +214,25 @@ export function UserPreviewsTable({
 
   return (
     <Card className="border-0 shadow-sm">
-      <CardHeader>
-        <CardTitle>User Previews</CardTitle>
-        <CardDescription>
-          {userCount > 0
-            ? `${userCount.toLocaleString()} users match the current filters`
-            : "No users match the current filters"}
-        </CardDescription>
+      <CardHeader className="flex flex-row justify-between items-center">
+        <div className="space-y-1">
+          <CardTitle>User Previews</CardTitle>
+          <CardDescription>
+            {userCount > 0
+              ? `${userCount.toLocaleString()} users match the current filters`
+              : "No users match the current filters"}
+          </CardDescription>
+        </div>
+        <Input
+          placeholder="Filter by name..."
+          value={
+            (table.getColumn("user_name")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("user_name")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
