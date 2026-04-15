@@ -1,3 +1,6 @@
+import { BulkEmailUser } from "@/services/bulk-emails";
+import { toast } from "sonner";
+
 /**
  * Format a metric name for display (remove parentheses and shorten)
  */
@@ -43,4 +46,27 @@ export const supportedTemplateModelFieldValuePairs = {
   support_email: "admin@artusai.co",
   recommended_plan: "Pro Plan",
   faq_link: "https://artusai.co",
+};
+
+export const getUsersAsRecipients = (selectedUsers: BulkEmailUser[]) => {
+  return selectedUsers.map((user) => ({
+    email: user.email,
+    name: user.user_name,
+    templateData: {
+      // user specific template data will go here
+      name: user.user_name,
+      first_name: user.user_name.split(" ")[0],
+    },
+  }));
+};
+
+export const handleCopyTemplateField = (field: string) => {
+  try {
+    const valueToCopy = `{{${field}}}`;
+    navigator.clipboard.writeText(valueToCopy);
+    toast.success(`Copied ${field} to clipboard!`);
+  } catch (error: unknown) {
+    console.error("Error copying to clipboard:", error);
+    toast.error("Failed to copy to clipboard.");
+  }
 };

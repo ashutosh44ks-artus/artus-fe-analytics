@@ -36,7 +36,7 @@ import { useState } from "react";
 import { BulkEmailUser } from "@/services/bulk-emails";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { supportedTemplateModelFieldValuePairs } from "./utils";
+import { getUsersAsRecipients, supportedTemplateModelFieldValuePairs } from "./utils";
 import NewEmailTabContent from "./NewEmailTabContent";
 import EmailTemplateTabContent from "./EmailTemplateTabContent";
 
@@ -59,28 +59,25 @@ export function SendEmailCard({
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [draftSubject, setDraftSubject] = useState("Your subject line");
   const [draftBody, setDraftBody] = useState(
-    '<div style="padding: 8px 4px;"><h1>Hello {{first_name}},</h1><p>Write your template body here.</p></div>',
+    '<div style="padding: 8px 4px;"><h1>Hello {{first_name}},</h1><p>Hope you are doing well!</p></div>',
   );
 
   // bulk
-  const { mutate, isPending } = useMutation<
-    PostmarkBatchResponseItem[],
-    AxiosError,
-    SendBulkEmailRequest
-  >({
-    mutationFn: sendBulkEmail,
-    onSuccess: () => {
-      toast.success("Email campaign sent successfully!");
-    },
-    onError: (error) => {
-      console.error("Error sending campaign:", error);
-      toast.error("Error sending campaign. Check console for details.");
-    },
-    onSettled: () => {
-      setShowConfirmDialog(false);
-    },
-  });
-  const handleSendCampaign = async () => {
+  const { mutate: templateEmailMutate, isPending: isPendingTemplateEmail } =
+    useMutation<PostmarkBatchResponseItem[], AxiosError, SendBulkEmailRequest>({
+      mutationFn: sendBulkEmail,
+      onSuccess: () => {
+        toast.success("Email campaign sent successfully!");
+      },
+      onError: (error) => {
+        console.error("Error sending campaign:", error);
+        toast.error("Error sending campaign. Check console for details.");
+      },
+      onSettled: () => {
+        setShowConfirmDialog(false);
+      },
+    });
+  const handleSendTemplateEmail = async () => {
     if (!selectedTemplate) {
       toast.error("Please select an email template");
       return;
@@ -90,17 +87,9 @@ export function SendEmailCard({
       return;
     }
 
-    const usersAsRecipients = selectedUsers.map((user) => ({
-      email: user.email,
-      name: user.user_name,
-      templateData: {
-        // user specific template data will go here
-        name: user.user_name,
-        first_name: user.user_name.split(" ")[0],
-      },
-    }));
+    const usersAsRecipients = getUsersAsRecipients(selectedUsers);
 
-    mutate({
+    templateEmailMutate({
       templateId: selectedTemplate,
       recipients: usersAsRecipients,
     });
@@ -134,15 +123,7 @@ export function SendEmailCard({
       return;
     }
 
-    const usersAsRecipients = selectedUsers.map((user) => ({
-      email: user.email,
-      name: user.user_name,
-      templateData: {
-        // user specific template data will go here
-        name: user.user_name,
-        first_name: user.user_name.split(" ")[0],
-      },
-    }));
+    const usersAsRecipients = getUsersAsRecipients(selectedUsers);
 
     customEmailMutate({
       subject: draftSubject,
@@ -224,7 +205,7 @@ export function SendEmailCard({
               errorEmailTemplates={errorEmailTemplates}
               setShowConfirmDialog={setShowConfirmDialog}
               selectedUserCount={selectedUserCount}
-              isPending={isPending}
+              isPending={isPendingTemplateEmail}
             />
             {/* Confirmation Dialog */}
             <AlertDialog
@@ -261,10 +242,10 @@ export function SendEmailCard({
                 <div className="flex gap-3 justify-end">
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction
-                    onClick={handleSendCampaign}
-                    disabled={isPending || selectedUserCount === 0}
+                    onClick={handleSendTemplateEmail}
+                    disabled={isPendingTemplateEmail || selectedUserCount === 0}
                   >
-                    {isPending ? "Sending..." : "Send Campaign"}
+                    {isPendingTemplateEmail ? "Sending..." : "Send Campaign"}
                   </AlertDialogAction>
                 </div>
               </AlertDialogContent>
