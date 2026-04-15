@@ -21,6 +21,7 @@ export default function OverviewPage() {
   const [sessionsFilter, setSessionsFilter] =
     useState<FilterOptionValue>("all");
   const [jobTitlesFilter, setJobTitlesFilter] = useState<string>("all");
+  const [userPlansFilter, setUserPlansFilter] = useState<string>("all");
   const { data, isLoading, error } = useQuery<
     LunaOverviewFormattedData,
     AxiosError<LunaOverviewErrorResponse>
@@ -29,12 +30,14 @@ export default function OverviewPage() {
       usersFilter,
       sessionsFilter,
       jobTitlesFilter,
+      userPlansFilter,
     ),
     queryFn: async () => {
       const { user_name, ...rest } = await getLunaOverview({
         filter_by_users: usersFilter,
         filter_by_sessions: sessionsFilter,
         filter_by_job_title: jobTitlesFilter,
+        filter_by_user_plan: userPlansFilter,
       });
 
       return {
@@ -61,6 +64,7 @@ export default function OverviewPage() {
           setUsersFilter={setUsersFilter}
           setSessionsFilter={setSessionsFilter}
           setJobTitlesFilter={setJobTitlesFilter}
+          setUserPlansFilter={setUserPlansFilter}
         />
       </header>
       <main className="p-4 flex-1">

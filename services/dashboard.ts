@@ -11,6 +11,7 @@ export const dashboardQueryKeys = {
     usersFilter: string,
     sessionsFilter: string,
     jobTitlesFilter: string,
+    userPlansFilter: string,
   ) =>
     [
       ...dashboardQueryKeys.all,
@@ -18,6 +19,7 @@ export const dashboardQueryKeys = {
       usersFilter,
       sessionsFilter,
       jobTitlesFilter,
+      userPlansFilter,
     ] as const,
 
   jobTitles: () =>
@@ -46,6 +48,7 @@ interface LunaOverviewParams {
   filter_by_users?: string;
   filter_by_sessions?: string;
   filter_by_job_title?: string;
+  filter_by_user_plan?: string;
 }
 export interface LunaOverviewFormattedData {
   user_name: string;
@@ -55,6 +58,7 @@ export const getLunaOverview = async ({
   filter_by_users,
   filter_by_sessions,
   filter_by_job_title,
+  filter_by_user_plan,
 }: LunaOverviewParams): Promise<LunaOverviewSuccessResponse> => {
   const token = await getCookie("luna_auth_token");
   return await apiClient.post<LunaOverviewSuccessResponse>(`/luna_overview`, {
@@ -62,6 +66,7 @@ export const getLunaOverview = async ({
     filter_by_users,
     filter_by_sessions,
     filter_by_job_title,
+    filter_by_user_plan,
   });
 };
 

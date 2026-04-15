@@ -111,6 +111,7 @@ interface OverviewFiltersProps {
   setUsersFilter: Dispatch<SetStateAction<FilterOptionValue>>;
   setSessionsFilter: Dispatch<SetStateAction<FilterOptionValue>>;
   setJobTitlesFilter: Dispatch<SetStateAction<string>>;
+  setUserPlansFilter: Dispatch<SetStateAction<string>>;
 }
 const OverviewFilters = (props: OverviewFiltersProps) => {
   const [localUsersFilter, setLocalUsersFilter] =
@@ -119,12 +120,15 @@ const OverviewFilters = (props: OverviewFiltersProps) => {
     useState<FilterOptionValue>("all");
   const [localJobTitlesFilter, setLocalJobTitlesFilter] =
     useState<string>("all");
+  const [localUserPlansFilter, setLocalUserPlansFilter] =
+    useState<string>("all");
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const handleApplyFilters = () => {
     props.setUsersFilter(localUsersFilter);
     props.setSessionsFilter(localSessionsFilter);
     props.setJobTitlesFilter(localJobTitlesFilter);
+    props.setUserPlansFilter(localUserPlansFilter);
     setIsPopoverOpen(false);
   };
 
@@ -133,7 +137,7 @@ const OverviewFilters = (props: OverviewFiltersProps) => {
   return (
     <>
       {/* Desktop view */}
-      <div className="hidden lg:flex gap-2 items-center">
+      <div className="hidden xl:flex gap-2 items-center">
         <FilterSelect
           label="Users"
           value={localUsersFilter}
@@ -147,6 +151,20 @@ const OverviewFilters = (props: OverviewFiltersProps) => {
           onChange={setLocalSessionsFilter}
           triggerClassName="w-36"
           showLabel
+        />
+        <AsyncFilterSelect
+          label="Plan"
+          value={localUserPlansFilter}
+          onChange={setLocalUserPlansFilter}
+          triggerClassName="w-42"
+          showLabel
+          isLoading={false}
+          isError={false}
+          options={[
+            { label: "Any", value: "all" },
+            { label: "Free", value: "free" },
+            { label: "Pro", value: "pro" },
+          ]}
         />
         <AsyncFilterSelect
           label="Job Title"
@@ -168,7 +186,7 @@ const OverviewFilters = (props: OverviewFiltersProps) => {
       </div>
 
       {/* Mobile view */}
-      <div className="lg:hidden">
+      <div className="xl:hidden">
         <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
           <PopoverTrigger asChild>
             <Button size="sm" variant="outline">
