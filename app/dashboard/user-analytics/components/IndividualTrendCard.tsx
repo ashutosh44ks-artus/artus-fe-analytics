@@ -30,8 +30,19 @@ const IndividualTrendCard = ({
   data: UserAnalyticsTrendsByMetric;
   period: UserAnalyticsTrendsPeriod;
 }) => {
-  const getLatestMetricValue = (series?: UserAnalyticsTrendPoint[]) =>
-    series?.at(-1)?.count ?? null;
+  const getLatestMetricValue = (series?: UserAnalyticsTrendPoint[]) => {
+    if (metric === "new_signups") {
+      // show cummulative count for new signups
+      return series?.reduce((acc, point) => acc + point.count, 0) ?? null;
+    }
+    if (["dau", "wau", "mau"].includes(metric)) {
+      // for active users metrics, show the average
+      const total = series?.reduce((acc, point) => acc + point.count, 0) ?? 0;
+      const count = series?.length ?? 0;
+      return count > 0 ? +(total / count).toFixed(2) : null;
+    }
+    return series?.at(-1)?.count ?? null;
+  };
 
   const meta = useMemo(() => {
     if (["dau", "wau", "mau"].includes(metric)) {
@@ -46,7 +57,7 @@ const IndividualTrendCard = ({
     date: point.date,
     [metric]: point.count,
   }));
-  console.log("hheh", metric, buildChartConfig([metric]))
+
   return (
     <TrendCard
       title={meta.label}
