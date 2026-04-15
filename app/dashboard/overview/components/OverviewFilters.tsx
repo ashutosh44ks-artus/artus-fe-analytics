@@ -136,7 +136,7 @@ const OverviewFilters = (props: OverviewFiltersProps) => {
 
   return (
     <>
-      {/* Desktop view */}
+      {/* Large Screen view */}
       <div className="hidden xl:flex gap-2 items-center">
         <FilterSelect
           label="Users"
@@ -156,7 +156,7 @@ const OverviewFilters = (props: OverviewFiltersProps) => {
           label="Plan"
           value={localUserPlansFilter}
           onChange={setLocalUserPlansFilter}
-          triggerClassName="w-42"
+          triggerClassName="w-32"
           showLabel
           isLoading={false}
           isError={false}
@@ -185,7 +185,7 @@ const OverviewFilters = (props: OverviewFiltersProps) => {
         </Button>
       </div>
 
-      {/* Mobile view */}
+      {/* Small Screen view */}
       <div className="xl:hidden">
         <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
           <PopoverTrigger asChild>
@@ -212,6 +212,22 @@ const OverviewFilters = (props: OverviewFiltersProps) => {
                   value={localSessionsFilter}
                   onChange={setLocalSessionsFilter}
                   triggerClassName="w-full"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-semibold">Plan</label>
+                <AsyncFilterSelect
+                  label="Plan"
+                  value={localUserPlansFilter}
+                  onChange={setLocalUserPlansFilter}
+                  triggerClassName="w-full"
+                  isLoading={false}
+                  isError={false}
+                  options={[
+                    { label: "Any", value: "all" },
+                    { label: "Free Plan", value: "free" },
+                    { label: "Pro Plan", value: "pro" },
+                  ]}
                 />
               </div>
               <div className="flex flex-col gap-2">
