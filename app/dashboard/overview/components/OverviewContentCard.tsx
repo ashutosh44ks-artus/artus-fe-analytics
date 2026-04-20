@@ -33,8 +33,8 @@ const OverviewContentCard = ({ label, value }: OverviewContentCardProps) => {
       </div>
       <div className="flex gap-4 shrink-0 sm:w-auto w-full justify-between">
         <OverviewItemStat
-          label="Percentage"
-          value={`${value.percentage}%`}
+          label={label === "Total Projects" ? "Avg Per User" : "Percentage"}
+          value={`${value.percentage}${label === "Total Projects" ? "" : "%"}`}
           accent
         />
         <OverviewItemStat label="Count" value={value.count} />
