@@ -127,6 +127,7 @@ const Page = () => {
           <SessionAnalyticsContent
             sessionData={trendsData?.sessions_over_time}
             pageVisitData={trendsData?.page_visits_over_time}
+            retentionData={trendsData?.session_retention_over_time}
             period={trendsPeriod}
             isLoading={isTrendsLoading}
             error={trendsError}

@@ -51,6 +51,14 @@ export interface SessionAnalyticsTrendsDataSuccessResponse {
       total_visits: number;
       unique_visitors: number;
     }[];
+    session_retention_over_time: {
+      retention_pct: number;
+      step_retention_pct: number;
+      session_number: number;
+      users: number;
+      avg_session_duration_ms: number;
+      common_exit_path: string;
+    }[];
   };
 }
 export const getSessionAnalyticsTrendsData = async (

@@ -1,18 +1,9 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { type SessionAnalyticsTrendsPeriod } from "./utils";
 import { SessionAnalyticsTrendsDataSuccessResponse } from "@/services/session-analytics";
-import TrendCard, { EmptyState } from "@/app/dashboard/components/TrendCard";
 import PageVisitsTableCard from "./PageVisitsTableCard";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import {
-  formatCompactMetricValue,
-  formatTrendDateLabel,
-} from "@/app/dashboard/components/utils";
+import SessionRetentionCard from "./SessionRetentionCard";
+import SessionOverTimeCard from "./SessionOverTimeCard";
 
 interface SessionAnalyticsContentProps {
   sessionData:
@@ -20,6 +11,9 @@ interface SessionAnalyticsContentProps {
     | undefined;
   pageVisitData:
     | SessionAnalyticsTrendsDataSuccessResponse["trends"]["page_visits_over_time"]
+    | undefined;
+  retentionData:
+    | SessionAnalyticsTrendsDataSuccessResponse["trends"]["session_retention_over_time"]
     | undefined;
   period: SessionAnalyticsTrendsPeriod;
   isLoading: boolean;
@@ -29,6 +23,7 @@ interface SessionAnalyticsContentProps {
 const SessionAnalyticsContent = ({
   sessionData,
   pageVisitData,
+  retentionData,
   period,
   isLoading,
   error,
@@ -71,61 +66,8 @@ const SessionAnalyticsContent = ({
       ) : null}
 
       <div className="flex flex-col gap-4">
-        <TrendCard
-          title="Sessions Over Time"
-          description={`Number of sessions over the ${period.split("_").join(" ")}.`}
-        >
-          {sessionData.length === 0 ? (
-            <EmptyState message="No trend data is available yet." />
-          ) : (
-            <ChartContainer
-              config={{
-                count: {
-                  label: "Sessions",
-                },
-              }}
-              className="aspect-auto h-45 w-full"
-            >
-              <LineChart data={sessionData} margin={{ left: 8, right: 8 }}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="date"
-                  tickLine={false}
-                  axisLine={false}
-                  minTickGap={20}
-                  tickFormatter={(value) =>
-                    formatTrendDateLabel(String(value), period)
-                  }
-                />
-                <YAxis
-                  tickLine={false}
-                  axisLine={false}
-                  width={44}
-                  tickFormatter={formatCompactMetricValue}
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={
-                    <ChartTooltipContent
-                      indicator="dot"
-                      labelFormatter={(value) =>
-                        formatTrendDateLabel(String(value), period)
-                      }
-                    />
-                  }
-                />
-                <Line
-                  type="monotone"
-                  dataKey="count"
-                  stroke={`var(--color-blue-900)`}
-                  strokeWidth={2.5}
-                  dot={false}
-                  connectNulls
-                />
-              </LineChart>
-            </ChartContainer>
-          )}
-        </TrendCard>
+        <SessionOverTimeCard sessionData={sessionData} period={period} />
+        <SessionRetentionCard retentionData={retentionData} period={period} />
         <PageVisitsTableCard pageVisitData={pageVisitData} period={period} />
       </div>
     </div>
