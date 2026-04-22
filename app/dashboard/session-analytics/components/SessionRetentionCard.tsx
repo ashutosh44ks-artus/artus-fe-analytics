@@ -15,7 +15,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { FunnelChart, Funnel, LabelList, Tooltip, Cell } from "recharts";
-import { SessionAnalyticsTrendsPeriod } from "./utils";
+import { PERIOD_LABELS, SessionAnalyticsTrendsPeriod } from "./utils";
 import { formatMsToTime } from "@/lib/utils";
 import { MdOutlineArrowRightAlt } from "react-icons/md";
 
@@ -46,12 +46,6 @@ const FUNNEL_COLORS = [
   "#083344",
   "#082f49",
 ];
-
-const PERIOD_LABELS: Record<SessionAnalyticsTrendsPeriod, string> = {
-  last_week: "Last Week",
-  last_month: "Last Month",
-  last_year: "Last Year",
-};
 
 const getSampledSteps = (data: RetentionData) => {
   if (data.length <= MAX_VISIBLE_STEPS) {

@@ -19,8 +19,10 @@ import {
 } from "./components/utils";
 import { useState } from "react";
 import {
+  getSessionAnalyticsAllData,
   getSessionAnalyticsSummaryData,
   getSessionAnalyticsTrendsData,
+  SessionAnalyticsAllDataSuccessResponse,
   sessionAnalyticsDataQueryKeys,
   SessionAnalyticsSummaryDataSuccessResponse,
   SessionAnalyticsTrendsDataSuccessResponse,
@@ -98,6 +100,18 @@ const Page = () => {
     },
   );
 
+  const { data: userSessions } = useQuery<
+    SessionAnalyticsAllDataSuccessResponse["sessions"],
+    AxiosError
+  >({
+    queryKey: sessionAnalyticsDataQueryKeys.all(trendsPeriod),
+    queryFn: async () => {
+      const response = await getSessionAnalyticsAllData(trendsPeriod);
+      return response.sessions;
+    },
+    placeholderData: [],
+  });
+
   return (
     <div className="min-h-0 flex-1 flex flex-col relative">
       <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 justify-between border-b px-4 bg-gray-900">
@@ -128,6 +142,7 @@ const Page = () => {
             sessionData={trendsData?.sessions_over_time}
             pageVisitData={trendsData?.page_visits_over_time}
             retentionData={trendsData?.session_retention_over_time}
+            userSessions={userSessions}
             period={trendsPeriod}
             isLoading={isTrendsLoading}
             error={trendsError}

@@ -6,3 +6,9 @@ export const SessionAnalyticsTrendsPeriodOptions = [
 
 export type SessionAnalyticsTrendsPeriod =
   (typeof SessionAnalyticsTrendsPeriodOptions)[number]["value"];
+
+export const PERIOD_LABELS: Record<SessionAnalyticsTrendsPeriod, string> = {
+  last_week: "Last Week",
+  last_month: "Last Month",
+  last_year: "Last Year",
+};
