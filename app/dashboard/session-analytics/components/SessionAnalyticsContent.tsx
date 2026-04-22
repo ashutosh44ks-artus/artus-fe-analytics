@@ -1,9 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { type SessionAnalyticsTrendsPeriod } from "./utils";
-import { SessionAnalyticsTrendsDataSuccessResponse } from "@/services/session-analytics";
+import { SessionAnalyticsAllDataSuccessResponse, SessionAnalyticsTrendsDataSuccessResponse } from "@/services/session-analytics";
 import PageVisitsTableCard from "./PageVisitsTableCard";
 import SessionRetentionCard from "./SessionRetentionCard";
 import SessionOverTimeCard from "./SessionOverTimeCard";
+import SessionFlowConversions from "./SessionFlowConversions";
 
 interface SessionAnalyticsContentProps {
   sessionData:
@@ -15,6 +16,7 @@ interface SessionAnalyticsContentProps {
   retentionData:
     | SessionAnalyticsTrendsDataSuccessResponse["trends"]["session_retention_over_time"]
     | undefined;
+  userSessions: SessionAnalyticsAllDataSuccessResponse["sessions"] | undefined;
   period: SessionAnalyticsTrendsPeriod;
   isLoading: boolean;
   error: unknown;
@@ -24,6 +26,7 @@ const SessionAnalyticsContent = ({
   sessionData,
   pageVisitData,
   retentionData,
+  userSessions,
   period,
   isLoading,
   error,
@@ -69,6 +72,7 @@ const SessionAnalyticsContent = ({
         <SessionOverTimeCard sessionData={sessionData} period={period} />
         <SessionRetentionCard retentionData={retentionData} period={period} />
         <PageVisitsTableCard pageVisitData={pageVisitData} period={period} />
+        <SessionFlowConversions userSessions={userSessions} period={period} />
       </div>
     </div>
   );
