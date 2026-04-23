@@ -61,8 +61,19 @@ export interface SessionAnalyticsTrendsDataSuccessResponse {
       avg_session_duration_ms: number;
       common_exit_path: string;
     }[];
+    button_click_breakdown: {
+      event_value: string;
+      s1_count: number;
+      s2_count: number;
+      s3_count: number;
+      s4_count: number;
+      s1_pct: number;
+      s2_pct: number;
+      s3_pct: number;
+      s4_pct: number;
+    }[];
   };
-}
+};
 export const getSessionAnalyticsTrendsData = async (
   date_filter: SessionAnalyticsTrendsPeriod,
 ): Promise<SessionAnalyticsTrendsDataSuccessResponse> => {

@@ -5,6 +5,7 @@ import PageVisitsTableCard from "./PageVisitsTableCard";
 import SessionRetentionCard from "./SessionRetentionCard";
 import SessionOverTimeCard from "./SessionOverTimeCard";
 import SessionFlowConversions from "./SessionFlowConversions";
+import SessionButtonClickBreakdown from "./SessionButtonClickBreakdown";
 
 interface SessionAnalyticsContentProps {
   sessionData:
@@ -17,6 +18,9 @@ interface SessionAnalyticsContentProps {
     | SessionAnalyticsTrendsDataSuccessResponse["trends"]["session_retention_over_time"]
     | undefined;
   userSessions: SessionAnalyticsAllDataSuccessResponse["sessions"] | undefined;
+  buttonClickData:
+    | SessionAnalyticsTrendsDataSuccessResponse["trends"]["button_click_breakdown"]
+    | undefined;
   period: SessionAnalyticsTrendsPeriod;
   isLoading: boolean;
   error: unknown;
@@ -27,6 +31,7 @@ const SessionAnalyticsContent = ({
   pageVisitData,
   retentionData,
   userSessions,
+  buttonClickData,
   period,
   isLoading,
   error,
@@ -72,6 +77,7 @@ const SessionAnalyticsContent = ({
         <SessionOverTimeCard sessionData={sessionData} period={period} />
         <SessionRetentionCard retentionData={retentionData} period={period} />
         <PageVisitsTableCard pageVisitData={pageVisitData} period={period} />
+        <SessionButtonClickBreakdown buttonClickData={buttonClickData} period={period} />
         <SessionFlowConversions userSessions={userSessions} period={period} />
       </div>
     </div>
