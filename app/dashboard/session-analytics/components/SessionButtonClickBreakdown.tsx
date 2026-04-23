@@ -7,7 +7,6 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  type VisibilityState,
   type SortingState,
   useReactTable,
 } from "@tanstack/react-table";
@@ -52,9 +51,12 @@ type ButtonClickRow =
 
 type DisplayMode = "percentages" | "counts";
 
-const formatSessionPercent = (value: number) => {
-  const percent = value <= 1 ? value * 100 : value;
+const formatPercent = (numerator: number, denominator: number) => {
+  if (denominator <= 0) {
+    return "0%";
+  }
 
+  const percent = (numerator / denominator) * 100;
   return `${percent.toFixed(percent % 1 === 0 ? 0 : 1)}%`;
 };
 
@@ -66,8 +68,10 @@ const SessionButtonClickBreakdown = ({
     pageIndex: 0,
     pageSize: 10,
   });
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [displayMode, setDisplayMode] = useState<DisplayMode>("percentages");
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "event_value", desc: false },
+  ]);
+  const [displayMode, setDisplayMode] = useState<DisplayMode>("counts");
 
   const pagination = useMemo(
     () => ({
@@ -76,6 +80,19 @@ const SessionButtonClickBreakdown = ({
     }),
     [pageIndex, pageSize],
   );
+
+  const totals = useMemo(() => {
+    const rows = buttonClickData ?? [];
+
+    return rows.map((row) => ({
+      event_value: row.event_value,
+      total: row.s1_count + row.s2_count + row.s3_count + row.s4_count,
+    }));
+  }, [buttonClickData]);
+
+  const getTotalForEvent = (eventValue: string) => {
+    return totals.find((t) => t.event_value === eventValue)?.total ?? 0;
+  };
 
   const columnHelper = useMemo(() => createColumnHelper<ButtonClickRow>(), []);
 
@@ -105,104 +122,68 @@ const SessionButtonClickBreakdown = ({
           );
         },
       }),
-      // pct values
-      columnHelper.accessor("s1_pct", {
-        header: ({ column, table }) => (
-          <DataTableColumnHeader
-            table={table}
-            column={column}
-            title="Session 1 %"
-          />
-        ),
-        cell: (info) => formatSessionPercent(info.getValue()),
-      }),
-      columnHelper.accessor("s2_pct", {
-        header: ({ column, table }) => (
-          <DataTableColumnHeader
-            table={table}
-            column={column}
-            title="Session 2 %"
-          />
-        ),
-        cell: (info) => formatSessionPercent(info.getValue()),
-      }),
-      columnHelper.accessor("s3_pct", {
-        header: ({ column, table }) => (
-          <DataTableColumnHeader
-            table={table}
-            column={column}
-            title="Session 3 %"
-          />
-        ),
-        cell: (info) => formatSessionPercent(info.getValue()),
-      }),
-      columnHelper.accessor("s4_pct", {
-        header: ({ column, table }) => (
-          <DataTableColumnHeader
-            table={table}
-            column={column}
-            title="Session 4+ %"
-          />
-        ),
-        cell: (info) => formatSessionPercent(info.getValue()),
-      }),
-      // count values
       columnHelper.accessor("s1_count", {
         header: ({ column, table }) => (
           <DataTableColumnHeader
             table={table}
             column={column}
-            title="Session 1 Count"
+            title={displayMode === "counts" ? "Session 1" : "Session 1 %"}
           />
         ),
-        cell: (info) => info.getValue().toLocaleString(),
+        cell: (info) => {
+          const value = info.getValue();
+          return displayMode === "counts"
+            ? value.toLocaleString()
+            : formatPercent(value, getTotalForEvent(info.row.original.event_value));
+        },
       }),
       columnHelper.accessor("s2_count", {
         header: ({ column, table }) => (
           <DataTableColumnHeader
             table={table}
             column={column}
-            title="Session 2 Count"
+            title={displayMode === "counts" ? "Session 2" : "Session 2 %"}
           />
         ),
-        cell: (info) => info.getValue().toLocaleString(),
+        cell: (info) => {
+          const value = info.getValue();
+          return displayMode === "counts"
+            ? value.toLocaleString()
+            : formatPercent(value, getTotalForEvent(info.row.original.event_value));
+        },
       }),
       columnHelper.accessor("s3_count", {
         header: ({ column, table }) => (
           <DataTableColumnHeader
             table={table}
             column={column}
-            title="Session 3 Count"
+            title={displayMode === "counts" ? "Session 3" : "Session 3 %"}
           />
         ),
-        cell: (info) => info.getValue().toLocaleString(),
+        cell: (info) => {
+          const value = info.getValue();
+          return displayMode === "counts"
+            ? value.toLocaleString()
+            : formatPercent(value, getTotalForEvent(info.row.original.event_value));
+        },
       }),
       columnHelper.accessor("s4_count", {
         header: ({ column, table }) => (
           <DataTableColumnHeader
             table={table}
             column={column}
-            title="Session 4+ Count"
+            title={displayMode === "counts" ? "Session 4+" : "Session 4+ %"}
           />
         ),
-        cell: (info) => info.getValue().toLocaleString(),
+        cell: (info) => {
+          const value = info.getValue();
+          return displayMode === "counts"
+            ? value.toLocaleString()
+            : formatPercent(value, getTotalForEvent(info.row.original.event_value));
+        },
       }),
     ],
-    [columnHelper],
-  );
-
-  const columnVisibility = useMemo<VisibilityState>(
-    () => ({
-      s1_pct: displayMode === "percentages",
-      s2_pct: displayMode === "percentages",
-      s3_pct: displayMode === "percentages",
-      s4_pct: displayMode === "percentages",
-      s1_count: displayMode === "counts",
-      s2_count: displayMode === "counts",
-      s3_count: displayMode === "counts",
-      s4_count: displayMode === "counts",
-    }),
-    [displayMode],
+    [columnHelper, displayMode, totals],
   );
 
   const table = useReactTable({
@@ -212,7 +193,6 @@ const SessionButtonClickBreakdown = ({
     state: {
       pagination,
       sorting,
-      columnVisibility,
     },
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
@@ -229,7 +209,7 @@ const SessionButtonClickBreakdown = ({
             Session Button Click Breakdown
           </CardTitle>
           <CardDescription className="text-xs text-slate-400">
-            Breakdown of button and event interactions for sessions during the{" "}
+            Breakdown of button and event interactions for valid sessions during the{" "}
             {period.split("_").join(" ")}.
           </CardDescription>
         </div>

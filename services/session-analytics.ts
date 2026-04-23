@@ -67,10 +67,6 @@ export interface SessionAnalyticsTrendsDataSuccessResponse {
       s2_count: number;
       s3_count: number;
       s4_count: number;
-      s1_pct: number;
-      s2_pct: number;
-      s3_pct: number;
-      s4_pct: number;
     }[];
   };
 };
